@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "BoockTracker",
-    "slug": "BoockTracker",
+    "name": "web",
+    "slug": "web",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
