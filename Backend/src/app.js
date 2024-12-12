@@ -6,7 +6,8 @@ const app = express();
 
 app.get("/", (req, res) => res.send("API läuft"));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server läuft auf Port ${PORT}`);
-});
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+  });
