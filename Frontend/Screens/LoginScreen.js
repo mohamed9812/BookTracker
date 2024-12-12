@@ -52,7 +52,7 @@ export default function LoginScreen({ navigation }) {
           onPress={() => navigation.navigate('Register')} // Navigiere zu RegisterScreen
         >
           Registrieren
-        </Text>
+        </Text> ddd
       </Text>
     </SafeAreaView>
   );
