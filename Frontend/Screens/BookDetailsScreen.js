@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function BookDetailsScreen({ route, navigation }) {
   // Empfange fileUri aus den Parametern
@@ -17,9 +18,19 @@ export default function BookDetailsScreen({ route, navigation }) {
   const allFieldsFilled = Object.values(details).every((field) => field.trim() !== '');
 
   // Funktion zum Navigieren und Details übergeben
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (allFieldsFilled) {
-      navigation.navigate('SuccessScreen', { fileUri, ...details });
+      const book = { ...details, uri: fileUri }; // Buchdetails und URI kombinieren
+      try {
+        const existingBooks = await AsyncStorage.getItem("books");
+        const books = existingBooks ? JSON.parse(existingBooks) : [];
+        books.push(book); // Neues Buch zur Liste hinzufügen
+        await AsyncStorage.setItem("books", JSON.stringify(books)); // Speichern in AsyncStorage
+        console.log("Buch gespeichert:", book);
+        navigation.navigate('SuccessScreen', { fileUri, ...details });
+      } catch (error) {
+        console.error("Fehler beim Speichern des Buches:", error);
+      }
     }
   };
 

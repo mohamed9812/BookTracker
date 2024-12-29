@@ -16,10 +16,13 @@ export default function MenuScreen({ navigation }) {
       </View>
 
       {/* Buttons im Menü */}
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={() => navigation.navigate('BookListScreen')} // Navigiert zur BookListScreen
+      >
         <Text style={styles.buttonText}>Buch lesen</Text>
       </TouchableOpacity>
-
+      
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('UploadBookScreen')} // Navigiert zur UploadBookScreen

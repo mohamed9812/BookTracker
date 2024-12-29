@@ -26,6 +26,7 @@ export default function UploadBookScreen({ navigation }) {
 
   const goToNextScreen = () => {
     if (fileUri) {
+      // Navigiere zu BookDetailsScreen und übergebe die Datei-URI
       navigation.navigate("BookDetailsScreen", { fileUri });
     } else {
       alert("Bitte wähle zuerst eine Datei aus.");
@@ -70,22 +71,22 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   uploadButton: {
-    backgroundColor: "#FFFFFF", // Weißer Hintergrund
-    borderColor: "#6A5ACD",     // Optionaler Rahmen in Lila
+    backgroundColor: "#FFFFFF",
+    borderColor: "#6A5ACD",
     borderWidth: 1,
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 40,
     marginBottom: 20,
-    elevation: 5,               // Schatten für Android
-    shadowColor: "#000",        // Schatten für iOS
+    elevation: 5,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
   },
   uploadButtonText: {
     fontSize: 16,
-    color: "#333",              // Textfarbe
+    color: "#333",
     fontWeight: "bold",
   },
   nextButton: {

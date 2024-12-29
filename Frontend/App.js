@@ -8,6 +8,9 @@ import ProfileScreen from './Screens/ProfileScreen';
 import UploadBookScreen from './Screens/UploadBookScreen';
 import BookDetailsScreen from './Screens/BookDetailsScreen';
 import SuccessScreen from './Screens/SuccessScreen';
+import BookListScreen from './Screens/BookListScreen';
+import ReadBookScreen from "./Screens/ReadBookScreen";
+
 
 const Stack = createStackNavigator();
 
@@ -31,6 +34,8 @@ export default function App() {
         <Stack.Screen name="UploadBookScreen" component={UploadBookScreen} options={{ title: 'Buch hinzufügen' }} />
         <Stack.Screen name="BookDetailsScreen" component={BookDetailsScreen} options={{ title: 'Buch hinzufügen' }} />
         <Stack.Screen name="SuccessScreen" component={SuccessScreen} options={{ title: 'Erfolg' }} />
+        <Stack.Screen name="BookListScreen" component={BookListScreen} />
+        <Stack.Screen name="ReadBookScreen" component={ReadBookScreen} options={{ title: "Buch lesen" }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
