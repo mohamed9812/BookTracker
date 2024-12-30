@@ -10,7 +10,8 @@ import BookDetailsScreen from './Screens/BookDetailsScreen';
 import SuccessScreen from './Screens/SuccessScreen';
 import BookListScreen from './Screens/BookListScreen';
 import ReadBookScreen from "./Screens/ReadBookScreen";
-
+import RatingListScreen from './Screens/RatingListScreen';
+import RateBookScreen from './Screens/RateBookScreen';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,8 @@ export default function App() {
         <Stack.Screen name="SuccessScreen" component={SuccessScreen} options={{ title: 'Erfolg' }} />
         <Stack.Screen name="BookListScreen" component={BookListScreen} />
         <Stack.Screen name="ReadBookScreen" component={ReadBookScreen} options={{ title: "Buch lesen" }}/>
+        <Stack.Screen name="RatingListScreen" component={RatingListScreen} options={{ title: 'Bewertungsliste' }}  />
+        <Stack.Screen name="RateBookScreen" component={RateBookScreen} options={{ title: 'Buch bewerten' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
