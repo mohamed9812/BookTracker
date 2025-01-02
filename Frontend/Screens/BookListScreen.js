@@ -15,7 +15,7 @@ export default function BookListScreen({ navigation }) {
         const parsedBooks = storedBooks ? JSON.parse(storedBooks) : [];
         setBooks(parsedBooks);
       } catch (error) {
-        console.error("Fehler beim Abrufen der Bücher:", error);
+        console.error("fehler beim Abrufen der Bücher:", error);
       }
     };
 
