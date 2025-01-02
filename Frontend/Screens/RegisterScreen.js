@@ -10,12 +10,32 @@ export default function RegisterScreen({ navigation }) {
   // Überprüfen, ob alle Felder ausgefüllt sind
   const isFormValid = username && email && password && confirmPassword;
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (password !== confirmPassword) {
       Alert.alert('Fehler', 'Passwörter stimmen nicht überein');
-    } else {
-      // Wenn alles korrekt ist, navigiere zum LoginScreen
-      navigation.navigate('Login');
+      return;
+    }
+
+
+    try {
+      const response = await fetch("http://localhost:4000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password}),
+      });
+
+      const data = await response.json();
+
+      if(response.ok) {
+        console.log("Registrierung erfolgreich");
+      }else{
+        console.error("Registrierung fehlgeschlagen");
+      }
+
+    }catch (err) {
+      console.error("Es gab ein Problem mit der Registrierung. Bitte versuche es später erneut.")
     }
   };
 

@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const transport = require('../Config/nodemailer.config');
 
 exports.register = async (req, res) => {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
 
 
     try {
@@ -19,6 +19,7 @@ exports.register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = new User({
+            username,
             email,
             password: hashedPassword,
             genred: []
