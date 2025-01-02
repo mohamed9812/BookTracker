@@ -60,7 +60,7 @@ exports.register = async (req, res) => {
             await transport.sendMail(mailOptions);
             res.status(200).json({message: "User registered. Verification E-Mail sent."});
         }catch(err) {
-            res.status(500).json({ error: "Sendind verification E-Mail failed."});
+            res.status(500).json({ error: "Sending verification E-Mail failed."});
         }
 
     }catch(err) {
