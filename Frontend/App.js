@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as Notifications from 'expo-notifications'; // Importiere Notifications
 import LoginScreen from './Screens/LoginScreen';
 import RegisterScreen from './Screens/RegisterScreen';
 import MenuScreen from './Screens/MenuScreen';
@@ -12,6 +13,16 @@ import BookListScreen from './Screens/BookListScreen';
 import ReadBookScreen from "./Screens/ReadBookScreen";
 import RatingListScreen from './Screens/RatingListScreen';
 import RateBookScreen from './Screens/RateBookScreen';
+import NotificationScreen from './Screens/NotificationScreen';
+
+// Konfiguration des Benachrichtigungshandlers
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const Stack = createStackNavigator();
 
@@ -39,6 +50,7 @@ export default function App() {
         <Stack.Screen name="ReadBookScreen" component={ReadBookScreen} options={{ title: "Buch lesen" }}/>
         <Stack.Screen name="RatingListScreen" component={RatingListScreen} options={{ title: 'Bewertungsliste' }}  />
         <Stack.Screen name="RateBookScreen" component={RateBookScreen} options={{ title: 'Buch bewerten' }} />
+        <Stack.Screen name="NotificationScreen" component={NotificationScreen} options={{ title: 'Lesezeit Wecker' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

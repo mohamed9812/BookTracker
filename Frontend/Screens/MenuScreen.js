@@ -31,15 +31,16 @@ export default function MenuScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity
-  style={styles.button}
-  onPress={() => navigation.navigate('RatingListScreen')}
->
-  <Text style={styles.buttonText}>Bewertung abgeben</Text>
-</TouchableOpacity>
+        style={styles.button}
+        onPress={() => navigation.navigate('RatingListScreen')} // Navigiert zur RatingListScreen
+      >
+        <Text style={styles.buttonText}>Bewertung abgeben</Text>
+      </TouchableOpacity>
 
-      
-
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={() => navigation.navigate('NotificationScreen')} // Navigiert zur Lesezeitbenachrichtigung
+      >
         <Text style={styles.buttonText}>Lesezeitbenachrichtigung</Text>
       </TouchableOpacity>
 
