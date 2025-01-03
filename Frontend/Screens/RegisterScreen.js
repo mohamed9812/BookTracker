@@ -30,6 +30,7 @@ export default function RegisterScreen({ navigation }) {
 
       if(response.ok) {
         console.log("Registrierung erfolgreich");
+        navigation.navigate('Login');
       }else{
         console.error("Registrierung fehlgeschlagen");
       }

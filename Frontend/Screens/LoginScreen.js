@@ -1,24 +1,51 @@
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
+import React, { useState } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Alert,
+} from "react-native";
 
 export default function LoginScreen({ navigation }) {
-  const [username, setUsername] = useState(''); // Speichert den Benutzernamen
-  const [password, setPassword] = useState(''); // Speichert das Passwort
+  const [username, setUsername] = useState(""); // Speichert den Benutzernamen
+  const [password, setPassword] = useState(""); // Speichert das Passwort
 
-  const handleLogin = () => {
-    if (username === 'admin' && password === '1234') {
-      // Navigation zum Menü-Screen, wenn die Eingabe korrekt ist
-      navigation.navigate('Menu');
-    } else {
-      // Fehlernachricht anzeigen
-      Alert.alert('Fehler', 'Benutzername oder Passwort ist falsch.');
+  const handleLogin = async () => {
+
+    try {
+      const response = await fetch('http://localhost:4000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (response.ok) {
+        console.log("Login erfolgreich");
+        navigation.navigate("Menu");
+      } else {
+        Alert.alert("Fehler", "Login fehlgeschlagen");
+      }
+    } catch (err) {
+      Alert.alert(
+        "Fehler",
+        "Es gab ein Problem mit dem Login. Bitte versuche es später erneut."
+      );
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Login</Text>
-      
+
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -46,13 +73,13 @@ export default function LoginScreen({ navigation }) {
         Passwort vergessen? <Text style={styles.link}>Zurücksetzen</Text>
       </Text>
       <Text style={styles.linkText}>
-        Noch keinen Account?{' '}
+        Noch keinen Account?{" "}
         <Text
           style={styles.link}
-          onPress={() => navigation.navigate('Register')} // Navigiere zu RegisterScreen
+          onPress={() => navigation.navigate("Register")} // Navigiere zu RegisterScreen
         >
           Registrieren
-        </Text> 
+        </Text>
       </Text>
     </SafeAreaView>
   );
@@ -61,23 +88,23 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E3E3FD',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#E3E3FD",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 16,
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    fontWeight: "bold",
+    color: "#FFFFFF",
     marginBottom: 40,
   },
   inputContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderRadius: 30,
     marginBottom: 20,
-    width: '90%',
-    shadowColor: '#000',
+    width: "90%",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -87,29 +114,29 @@ const styles = StyleSheet.create({
     height: 50,
     paddingHorizontal: 16,
     fontSize: 16,
-    color: '#000',
+    color: "#000",
   },
   button: {
-    backgroundColor: '#6A5ACD',
+    backgroundColor: "#6A5ACD",
     borderRadius: 30,
-    width: '90%',
+    width: "90%",
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 20,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   linkText: {
     marginTop: 10,
-    color: '#555',
+    color: "#555",
     fontSize: 14,
   },
   link: {
-    color: '#6A5ACD',
-    fontWeight: 'bold',
+    color: "#6A5ACD",
+    fontWeight: "bold",
   },
 });

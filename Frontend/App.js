@@ -14,6 +14,7 @@ import ReadBookScreen from "./Screens/ReadBookScreen";
 import RatingListScreen from './Screens/RatingListScreen';
 import RateBookScreen from './Screens/RateBookScreen';
 import NotificationScreen from './Screens/NotificationScreen';
+import VerifyEmailScreen from './Screens/VerifyEmailScreen';
 
 // Konfiguration des Benachrichtigungshandlers
 Notifications.setNotificationHandler({
@@ -26,9 +27,19 @@ Notifications.setNotificationHandler({
 
 const Stack = createStackNavigator();
 
+// Konfiguration für Deep Linking
+const linking = {
+  prefixes: ['http://localhost:8081'],
+  config: {
+    screens: {
+      VerifyEmail: 'verify-email/:token', //
+    },
+  },
+};
+
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen}
           options={{
@@ -51,6 +62,7 @@ export default function App() {
         <Stack.Screen name="RatingListScreen" component={RatingListScreen} options={{ title: 'Bewertungsliste' }}  />
         <Stack.Screen name="RateBookScreen" component={RateBookScreen} options={{ title: 'Buch bewerten' }} />
         <Stack.Screen name="NotificationScreen" component={NotificationScreen} options={{ title: 'Lesezeit Wecker' }} />
+        <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
