@@ -2,7 +2,7 @@ const cors = require('cors');
 
 const setupCors = (app) => {
   app.use(cors({
-    origin: ['*'],
+    origin: ['*', 'http://localhost:8081'],
     credentials: true
   }));
 };

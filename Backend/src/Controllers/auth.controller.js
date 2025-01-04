@@ -67,7 +67,7 @@ exports.register = async (req, res) => {
 
 exports.verifyEmail = async (req, res) => {
   const verificationToken = req.params.token;
-  console.log(verificationToken);
+
   try {
     const verifyEmailPayload = jwt.verify(
       verificationToken,
