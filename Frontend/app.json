@@ -31,10 +31,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "a6bf5ed3-5424-4ffe-bc09-dd1eef40b2ed"
+        "projectId": "71d740d1-dd00-4121-bf7e-d640ac800f67"
       }
     },
-    "owner": "inthense",
+    "owner": "booktracker",
     "slug": "booktracker"
   }
 }
