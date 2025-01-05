@@ -16,7 +16,7 @@ export default function LoginScreen({ navigation }) {
   const handleLogin = async () => {
 
     try {
-      const response = await fetch('http://192.168.10.58:4000/api/auth/login', {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_BASE_URI}:4000/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

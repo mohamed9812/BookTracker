@@ -29,7 +29,7 @@ const Stack = createStackNavigator();
 
 // Konfiguration für Deep Linking
 const linking = {
-  prefixes: ['http://localhost:8081'],
+  prefixes: [`http://${process.env.EXPO_PUBLIC_BASE_URI}:8081`],
   config: {
     screens: {
       VerifyEmail: 'verify-email/:token', //
