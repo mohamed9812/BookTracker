@@ -1,29 +1,23 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { WebView } from 'react-native-webview';
+import Pdf from 'react-native-pdf';
 
 export default function ReadBookScreen({ route }) {
   const { fileUri, title } = route.params;
 
-  const pdfHTML = `
-    <html>
-      <body style="margin: 0; padding: 0;">
-        <iframe
-          src="${fileUri}"
-          style="width: 100%; height: 100%; border: none;"
-          allowfullscreen
-        ></iframe>
-      </body>
-    </html>
-  `;
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title || "Buch lesen"}</Text>
-      <WebView
-        originWhitelist={['*']}
-        source={{ html: pdfHTML }}
-        style={styles.webView}
+      <Pdf
+        trustAllCerts={false}
+        source={{ uri: fileUri }}
+        style={styles.pdf}
+        onLoadComplete={(numberOfPages, filePath) => {
+          console.log(`number of pages: ${numberOfPages}`);
+        }}
+        onError={(error) => {
+          console.error(error);
+        }}
       />
     </View>
   );
@@ -41,7 +35,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
   },
-  webView: {
+  pdf: {
     flex: 1,
   },
 });

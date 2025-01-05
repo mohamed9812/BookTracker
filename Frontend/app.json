@@ -1,12 +1,15 @@
 {
   "expo": {
     "name": "MyBooks",
-    "slug": "MyBooks",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "plugins": [
+      "@config-plugins/react-native-blob-util",
+      "@config-plugins/react-native-pdf"
+    ],
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -20,16 +23,18 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.inthense.booktracker"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "0b7e60c1-a5a4-4294-b3e0-f3bcbd87275d"
+        "projectId": "a6bf5ed3-5424-4ffe-bc09-dd1eef40b2ed"
       }
     },
-    "owner": "moo00"
+    "owner": "inthense",
+    "slug": "booktracker"
   }
 }

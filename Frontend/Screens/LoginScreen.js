@@ -16,7 +16,7 @@ export default function LoginScreen({ navigation }) {
   const handleLogin = async () => {
 
     try {
-      const response = await fetch('http://localhost:4000/api/auth/login', {
+      const response = await fetch('http://192.168.10.58:4000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -26,7 +26,6 @@ export default function LoginScreen({ navigation }) {
 
       const data = await response.json();
 
-      console.log(data);
 
       if (response.ok) {
         console.log("Login erfolgreich");
