@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, FlatList } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, FlatList, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function NotificationScreen() {
   const [time, setTime] = useState(new Date());
+  const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [scheduledNotifications, setScheduledNotifications] = useState([]);
+  const [showPicker, setShowPicker] = useState(false);
 
-  // Lade gespeicherte Benachrichtigungen beim Start
   useEffect(() => {
+    (async () => {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Fehler', 'Benachrichtigungen sind deaktiviert!');
+      }
+    })();
+
     const loadNotifications = async () => {
       try {
         const storedNotifications = await AsyncStorage.getItem('scheduledNotifications');
         if (storedNotifications) {
-          setScheduledNotifications(JSON.parse(storedNotifications));
+          const notifications = JSON.parse(storedNotifications);
+          const filteredNotifications = notifications.filter(notification => {
+            const notificationTime = new Date(notification.time);
+            return notificationTime > new Date();n
+          });
+          setScheduledNotifications(filteredNotifications);
         }
       } catch (error) {
         console.error('Fehler beim Laden der Benachrichtigungen:', error);
@@ -33,9 +46,15 @@ export default function NotificationScreen() {
     }
   };
 
+  const onTimeChange = (event, selectedTime) => {
+    const currentDate = selectedTime || time;
+    setShowPicker(Platform.OS === 'ios');
+    setTime(currentDate);
+  };
+
   const scheduleNotification = async () => {
-    if (!message.trim()) {
-      Alert.alert('Fehler', 'Bitte gib eine Nachricht ein.');
+    if (!message.trim() || !title.trim()) {
+      Alert.alert('Fehler', 'Bitte gib sowohl einen Titel als auch eine Nachricht ein.');
       return;
     }
 
@@ -50,62 +69,69 @@ export default function NotificationScreen() {
     );
 
     if (triggerTime <= now) {
-      // Wenn die Zeit in der Vergangenheit liegt, stelle den Wecker auf den nächsten Tag ein
       triggerTime.setDate(triggerTime.getDate() + 1);
     }
 
-    const secondsUntilTrigger = Math.floor((triggerTime - now) / 1000);
-    console.log('Sekunden bis zum Trigger:', secondsUntilTrigger); // Log die Sekunden bis zum Trigger
+    // Benachrichtigung planen
+    const notificationId = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: title,
+        body: message,
+      },
+      trigger: triggerTime,
+    });
 
-    try {
-      const notificationId = await Notifications.scheduleNotificationAsync({
-        content: {
-          title: 'Lesezeit!',
-          body: message,
-        },
-        trigger: {
-          seconds: secondsUntilTrigger,
-        },
-      });
+    const newNotification = {
+      id: notificationId,
+      title,
+      message,
+      time: triggerTime.toISOString(),
+    };
 
-      const newNotification = {
-        id: notificationId,
-        message,
-        time: triggerTime.toLocaleTimeString(),
-      };
+    const updatedNotifications = [...scheduledNotifications, newNotification];
+    
+    const filteredNotifications = updatedNotifications.filter(notification => {
+      const notificationTime = new Date(notification.time);
+      return notificationTime > new Date();
+    });
 
-      const updatedNotifications = [...scheduledNotifications, newNotification];
-      setScheduledNotifications(updatedNotifications);
+    setScheduledNotifications(filteredNotifications);
+    saveNotifications(filteredNotifications);
 
-      // Speichere die Benachrichtigungen
-      saveNotifications(updatedNotifications);
+    setMessage('');
+    setTitle('');
 
-     
-      setMessage(''); // Eingabe leeren
-    } catch (error) {
-      console.error('Fehler beim Planen der Benachrichtigung:', error);
-      Alert.alert('Fehler', 'Die Benachrichtigung konnte nicht erstellt werden.');
-    }
+    Alert.alert('Benachrichtigung geplant', `Die Benachrichtigung wird um ${triggerTime.toLocaleTimeString()} ausgelöst.`);
   };
 
   const cancelNotification = async (id) => {
-    try {
-      await Notifications.cancelScheduledNotificationAsync(id);
-      const updatedNotifications = scheduledNotifications.filter((n) => n.id !== id);
-      setScheduledNotifications(updatedNotifications);
+    await Notifications.cancelScheduledNotificationAsync(id);
 
-      // Speichere die aktualisierten Benachrichtigungen
-      saveNotifications(updatedNotifications);
+    const updatedNotifications = scheduledNotifications.filter((n) => n.id !== id);
+    
+    const filteredNotifications = updatedNotifications.filter(notification => {
+      const notificationTime = new Date(notification.time);
+      return notificationTime > new Date();
+    });
 
-      
-    } catch (error) {
-      console.error('Fehler beim Löschen der Benachrichtigung:', error);
-    }
+    setScheduledNotifications(filteredNotifications);
+    saveNotifications(filteredNotifications);
+
+    Alert.alert('Benachrichtigung gelöscht', 'Die geplante Benachrichtigung wurde gelöscht.');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Lesezeitbenachrichtigung</Text>
+
+      {/* Titel und Nachricht Eingabefelder */}
+      <Text style={styles.label}>Titel:</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Gib einen Titel ein"
+        value={title}
+        onChangeText={setTitle}
+      />
       <Text style={styles.label}>Nachricht:</Text>
       <TextInput
         style={styles.input}
@@ -113,27 +139,32 @@ export default function NotificationScreen() {
         value={message}
         onChangeText={setMessage}
       />
-      <Text style={styles.label}>Wähle eine Uhrzeit:</Text>
-      <DateTimePicker
-        value={time}
-        mode="time"
-        is24Hour={true}
-        display="default"
-        onChange={(event, selectedDate) => {
-          const currentDate = selectedDate || time;
-          setTime(currentDate);
-        }}
-      />
-      <Button title="Wecker erstellen" onPress={scheduleNotification} />
+
+      {/* Zeit Auswahl */}
+      <Text style={styles.label}>Gewählte Uhrzeit: {time.toLocaleTimeString()}</Text>
+      <Button title="Uhrzeit wählen" onPress={() => setShowPicker(true)} />
+      
+      {showPicker && (
+        <DateTimePicker
+          value={time}
+          mode="time"
+          is24Hour={true}
+          display="default"
+          onChange={onTimeChange}
+        />
+      )}
+
+      <Button title="Benachrichtigung planen" onPress={scheduleNotification} />
 
       <Text style={styles.subTitle}>Geplante Benachrichtigungen:</Text>
+
       <FlatList
         data={scheduledNotifications}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.notificationItem}>
             <Text style={styles.notificationText}>
-              {item.time} - {item.message}
+              {new Date(item.time).toLocaleTimeString()} - {item.title}: {item.message}
             </Text>
             <Button
               title="Löschen"
