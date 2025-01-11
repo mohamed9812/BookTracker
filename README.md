@@ -80,11 +80,15 @@ Die Anleitung führt Sie durch die Installation und das Ausführen der beiden Ko
 
    ```bash
    npm start
+
+
+4. **App instalieren**:
+   ```bash
+   https://expo.dev/accounts/booktracker/projects/booktracker/builds/77b2488f-a5ed-4ae2-863c-e456ffda6bfb
    ```
-
-3\. App installieren
-
-
+5. **App einrichten**:
+   App starten und Link in der Konsole einfügen. Im Frontend localhost durch die private IP-Adresse (192....) ersetzen.
+   Das Gerät muss im selben Netzwerk sein.
 
 ---
 
@@ -100,7 +104,7 @@ Die Anleitung führt Sie durch die Installation und das Ausführen der beiden Ko
 
 ### App testen
 
-- Starten Sie die App und prüfen Sie die Kommunikation mit dem Backend.
+- Starten Sie die App und prüfen Sie die Kommunikation mit dem Backend indem Sie sich versuchen einzuloggen.
 
 ---
 
