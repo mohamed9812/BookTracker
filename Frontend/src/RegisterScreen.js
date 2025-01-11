@@ -26,17 +26,21 @@ export default function RegisterScreen({ navigation }) {
         body: JSON.stringify({ username, email, password}),
       });
 
+      
+
+
+
       const data = await response.json();
 
+
       if(response.ok) {
-        console.log("Registrierung erfolgreich");
         navigation.navigate('Login');
       }else{
-        console.error("Registrierung fehlgeschlagen");
+        Alert.alert("Registrierung fehlgeschlagen");
       }
 
     }catch (err) {
-      console.error("Es gab ein Problem mit der Registrierung. Bitte versuche es später erneut.")
+      Alert.alert("Es gab ein Problem mit der Registrierung. Bitte versuche es später erneut.")
     }
   };
 

@@ -28,7 +28,6 @@ export default function LoginScreen({ navigation }) {
 
 
       if (response.ok) {
-        console.log("Login erfolgreich");
         navigation.navigate("Menu");
       } else {
         Alert.alert("Fehler", "Login fehlgeschlagen");

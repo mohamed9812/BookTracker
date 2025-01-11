@@ -4,13 +4,17 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const transport = require("../Config/nodemailer.config");
 
+
+// Register a new user
 exports.register = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const existingEmail = await User.findOne({ email });
+    const existingUsername = await User.findOne({ username });
 
-    if (user) {
+
+    if (existingEmail || existingUsername) {
       return res.status(400).json({ message: "User already exists" });
     }
 
@@ -21,6 +25,7 @@ exports.register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      verified: true,
       genred: [],
     });
 
@@ -48,8 +53,11 @@ exports.register = async (req, res) => {
     const mailOptions = {
       from: process.env.MAIL_USER,
       to: email,
-      subject: "Account Verification",
-      html: `Herzlich Willkommen beim BookTracker, <br><br>Bitte klicke auf den folgenden Link um die Registireung abzuschließen: <br><br><a href="${process.env.BASE_URL}/verify-email/${verificationToken}">${process.env.BASE_URL}/verify-email/${verificationToken}`,
+      subject: "Wilkommen beim BookTracker",
+      html: `Herzlich Willkommen beim BookTracker, <br><br>Wir wünschen dir viel Spaß beim Lesen!`
+      // If verification E-Mail is needed:
+      // subject: "Account Verification",
+      // html: `Herzlich Willkommen beim BookTracker, <br><br>Bitte klicke auf den folgenden Link um die Registireung abzuschließen: <br><br><a href="${process.env.BASE_URL}/verify-email/${verificationToken}">${process.env.BASE_URL}/verify-email/${verificationToken}`,
     };
 
     try {
@@ -65,6 +73,7 @@ exports.register = async (req, res) => {
   }
 };
 
+// Email verification
 exports.verifyEmail = async (req, res) => {
   const verificationToken = req.params.token;
 
@@ -93,6 +102,8 @@ exports.verifyEmail = async (req, res) => {
   }
 };
 
+
+// Login
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
