@@ -86,7 +86,8 @@ Die Anleitung führt Sie durch die Installation und das Ausführen der beiden Ko
    ```bash
    https://expo.dev/accounts/booktracker/projects/booktracker/builds/77b2488f-a5ed-4ae2-863c-e456ffda6bfb
    ```
-5. **App einrichten**:
+5. **App einrichten**
+   
    App starten und Link in der Konsole einfügen. Im Frontend localhost durch die private IP-Adresse (192....) ersetzen.
    Das Gerät muss im selben Netzwerk sein.
 
