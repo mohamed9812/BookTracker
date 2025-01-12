@@ -16,7 +16,7 @@ export default function UploadBookScreen({ navigation }) {
 
       if (!result.canceled && result.assets) {
         const { uri } = result.assets[0];
-        setFileUri(uri); // Speichere die Datei-URI
+        setFileUri(uri);
         console.log("Datei-URI gespeichert:", uri);
       }
     } catch (error) {
@@ -26,7 +26,7 @@ export default function UploadBookScreen({ navigation }) {
 
   const goToNextScreen = () => {
     if (fileUri) {
-      // Navigiere zu BookDetailsScreen und übergebe die Datei-URI
+
       navigation.navigate("BookDetailsScreen", { fileUri });
     } else {
       alert("Bitte wähle zuerst eine Datei aus.");
@@ -54,7 +54,7 @@ export default function UploadBookScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E3E3FD",
+    backgroundColor: "#D8C3FC",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,

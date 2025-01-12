@@ -6,6 +6,10 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "packagerOpts": {
+      "sourceExts": ["js", "jsx", "svgx"],
+      "transformer": "node_modules/react-native-svg-transformer/index.js"
+    },
     "plugins": [
       "@config-plugins/react-native-blob-util",
       "@config-plugins/react-native-pdf"

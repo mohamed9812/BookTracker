@@ -123,7 +123,7 @@ export default function BookListScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E3E3FD",
+    backgroundColor: "#D8C3FC",
     padding: 20,
   },
   title: {

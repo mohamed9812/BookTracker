@@ -1,16 +1,51 @@
-import React, { useState } from 'react';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
+  SafeAreaView,
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Modal,
-  Pressable,
 } from 'react-native';
 
 export default function ProfileScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const userId = await AsyncStorage.getItem("userId");
+        if (userId) {
+          const response = await fetch(
+            `${process.env.EXPO_PUBLIC_BASE_URI}:4000/api/user/${userId}`
+          );
+          const data = await response.json();
+          if (response.ok) {
+            setUserName(data.username);
+          } else {
+            console.error("Fehler beim Abrufen des Nutzernamens");
+          }
+        }
+      } catch (error) {
+        console.error("Fehler beim Abrufen der userId", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserName();
+  }, []);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>Lade...</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -30,7 +65,7 @@ export default function ProfileScreen({ navigation }) {
 
       <TouchableOpacity
         style={[styles.button, styles.logoutButton]}
-        onPress={() => setModalVisible(true)} // Modal öffnen
+        onPress={() => setModalVisible(true)}
       >
         <Text style={styles.logoutButtonText}>Logout</Text>
       </TouchableOpacity>
@@ -40,17 +75,17 @@ export default function ProfileScreen({ navigation }) {
         transparent={true}
         visible={modalVisible}
         animationType="slide"
-        onRequestClose={() => setModalVisible(false)} // Modal schließen
+        onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Möchten Sie sich wirklich abmelden?</Text>
+            <Text style={styles.modalTitle}>Als {userName} abmelden?</Text>
 
             <TouchableOpacity
               style={[styles.modalButton, styles.confirmButton]}
               onPress={() => {
-                setModalVisible(false); // Modal schließen
-                navigation.navigate('Login'); // Zurück zum Login
+                setModalVisible(false);
+                navigation.navigate('Login');
               }}
             >
               <Text style={styles.confirmText}>Abmelden</Text>
@@ -58,7 +93,7 @@ export default function ProfileScreen({ navigation }) {
 
             <TouchableOpacity
               style={[styles.modalButton, styles.cancelButton]}
-              onPress={() => setModalVisible(false)} // Modal schließen
+              onPress={() => setModalVisible(false)}
             >
               <Text style={styles.cancelText}>Abbrechen</Text>
             </TouchableOpacity>
@@ -72,9 +107,9 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E3E3FD',
+    backgroundColor: '#D8C3FC',
     alignItems: 'center',
-    justifyContent: 'flex-start', // Inhalt oben beginnen
+    justifyContent: 'flex-start',
     padding: 16,
   },
   header: {
@@ -85,8 +120,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    left: 10, // Abstand vom linken Rand
-    top: 10,  // Abstand vom oberen Rand
+    left: 10,
+    top: 10,
     padding: 10,
   },
   title: {
