@@ -7,11 +7,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
-} from 'react-native';
+  FlatList,
+} from "react-native";
 
 export default function ProfileScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [genresModalVisible, setGenresModalVisible] = useState(false);
   const [userName, setUserName] = useState("");
+  const [favoriteGenres, setFavoriteGenres] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,6 +42,26 @@ export default function ProfileScreen({ navigation }) {
     fetchUserName();
   }, []);
 
+  const calculateFavoriteGenres = async () => {
+    try {
+      const storedBooks = await AsyncStorage.getItem("books");
+      const books = storedBooks ? JSON.parse(storedBooks) : [];
+      const genreCount = {};
+
+      books.forEach((book) => {
+        if (book.genre) {
+          genreCount[book.genre] = (genreCount[book.genre] || 0) + 1;
+        }
+      });
+
+      const sortedGenres = Object.entries(genreCount).sort((a, b) => b[1] - a[1]);
+      setFavoriteGenres(sortedGenres.map(([genre, count]) => ({ genre, count })));
+      setGenresModalVisible(true);
+    } catch (error) {
+      console.error("Fehler beim Abrufen der Genres", error);
+    }
+  };
+
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -49,9 +72,8 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Header mit Zurück-Knopf */}
+      {/* Header */}
       <View style={styles.header}>
-      
         <Text style={styles.title}>Profil</Text>
       </View>
 
@@ -59,7 +81,10 @@ export default function ProfileScreen({ navigation }) {
         <Text style={styles.buttonText}>Buchempfehlungen</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={calculateFavoriteGenres}
+      >
         <Text style={styles.buttonText}>Lieblingsgenres</Text>
       </TouchableOpacity>
 
@@ -85,7 +110,7 @@ export default function ProfileScreen({ navigation }) {
               style={[styles.modalButton, styles.confirmButton]}
               onPress={() => {
                 setModalVisible(false);
-                navigation.navigate('Login');
+                navigation.navigate("Login");
               }}
             >
               <Text style={styles.confirmText}>Abmelden</Text>
@@ -100,6 +125,40 @@ export default function ProfileScreen({ navigation }) {
           </View>
         </View>
       </Modal>
+
+      {/* Modal für Lieblingsgenres */}
+      <Modal
+        transparent={true}
+        visible={genresModalVisible}
+        animationType="slide"
+        onRequestClose={() => setGenresModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Lieblingsgenres</Text>
+            {favoriteGenres.length > 0 ? (
+              <FlatList
+                data={favoriteGenres}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <Text style={styles.genreText}>
+                    {item.genre}: {item.count} 
+                  </Text>
+                )}
+              />
+            ) : (
+              <Text style={styles.noGenresText}>Keine Genres gefunden.</Text>
+            )}
+
+            <TouchableOpacity
+              style={[styles.modalButton, styles.cancelButton]}
+              onPress={() => setGenresModalVisible(false)}
+            >
+              <Text style={styles.cancelText}>Schließen</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -107,39 +166,33 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D8C3FC',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    backgroundColor: "#D8C3FC",
+    alignItems: "center",
+    justifyContent: "flex-start",
     padding: 16,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
     marginBottom: 20,
-  },
-  backButton: {
-    position: 'absolute',
-    left: 10,
-    top: 10,
-    padding: 10,
   },
   title: {
     flex: 1,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
   },
   button: {
-    width: '90%',
+    width: "90%",
     height: 50,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginVertical: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -147,57 +200,66 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   logoutButton: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: "#FF6B6B",
   },
   logoutButtonText: {
     fontSize: 16,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
+    color: "#FFFFFF",
+    fontWeight: "bold",
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContainer: {
-    width: '80%',
-    backgroundColor: '#E3E3FD',
+    width: "80%",
+    backgroundColor: "#E3E3FD",
     borderRadius: 20,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
+  },
+  genreText: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 10,
+  },
+  noGenresText: {
+    fontSize: 16,
+    color: "#555",
   },
   modalButton: {
-    width: '100%',
+    width: "100%",
     padding: 15,
     borderRadius: 10,
     marginVertical: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   confirmButton: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: "#FF6B6B",
   },
   cancelButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: '#333',
+    borderColor: "#333",
   },
   confirmText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
+    color: "#FFFFFF",
+    fontWeight: "bold",
   },
   cancelText: {
-    color: '#333',
-    fontWeight: 'bold',
+    color: "#333",
+    fontWeight: "bold",
   },
 });
