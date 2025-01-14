@@ -103,9 +103,7 @@ export default function MenuScreen({ navigation }) {
         <Text style={styles.buttonText}>In der Nähe Erkunden</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Buchdetails ergänzen</Text>
-      </TouchableOpacity>
+     
     </SafeAreaView>
   );
 }

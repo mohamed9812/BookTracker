@@ -26,7 +26,6 @@ export default function UploadBookScreen({ navigation }) {
 
   const goToNextScreen = () => {
     if (fileUri) {
-
       navigation.navigate("BookDetailsScreen", { fileUri });
     } else {
       alert("Bitte wähle zuerst eine Datei aus.");
@@ -38,7 +37,11 @@ export default function UploadBookScreen({ navigation }) {
       <Text style={styles.title}>Buch hinzufügen</Text>
       <Text style={styles.subtitle}>Bitte wähle eine Datei aus:</Text>
 
-      <TouchableOpacity style={styles.uploadButton} onPress={pickDocument}>
+      <TouchableOpacity
+        style={[styles.uploadButton, fileUri && styles.disabledButton]}
+        onPress={pickDocument}
+        disabled={!!fileUri} // Deaktiviert den Button, wenn eine Datei ausgewählt wurde
+      >
         <Text style={styles.uploadButtonText}>
           {fileUri ? "Datei ausgewählt" : "Datei Auswählen"}
         </Text>
@@ -83,6 +86,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
+  },
+  disabledButton: {
+    backgroundColor: "#E0E0E0", // Visuell anders, wenn deaktiviert
+    borderColor: "#CCC",
+    shadowOpacity: 0, // Keine Schatten für deaktivierten Button
   },
   uploadButtonText: {
     fontSize: 16,
