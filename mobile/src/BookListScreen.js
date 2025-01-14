@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, TextInput, Modal } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  TextInput,
+  Modal,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function BookListScreen({ navigation }) {
@@ -7,6 +16,10 @@ export default function BookListScreen({ navigation }) {
   const [selectedBook, setSelectedBook] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  const [newAuthor, setNewAuthor] = useState("");
+  const [newGenre, setNewGenre] = useState("");
+  const [newYear, setNewYear] = useState("");
+  const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -29,28 +42,56 @@ export default function BookListScreen({ navigation }) {
     Alert.alert("Erfolg", "Das Buch wurde gelöscht.");
   };
 
-  const renameBook = async () => {
+  const saveChanges = async () => {
     if (!newTitle.trim()) {
       Alert.alert("Fehler", "Der Titel darf nicht leer sein.");
       return;
     }
     const updatedBooks = books.map((b) =>
-      b.uri === selectedBook.uri ? { ...b, title: newTitle } : b
+      b.uri === selectedBook.uri
+        ? { ...b, title: newTitle, author: newAuthor, genre: newGenre, year: newYear }
+        : b
     );
     setBooks(updatedBooks);
     await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
     setModalVisible(false);
-    Alert.alert("Erfolg", "Der Titel wurde geändert.");
+    Alert.alert("Erfolg", "Die Änderungen wurden gespeichert.");
   };
 
   const openOptions = (book) => {
     setSelectedBook(book);
-    setNewTitle(book.title || ""); // Den aktuellen Titel als Standard setzen
+    setNewTitle(book.title || "");
+    setNewAuthor(book.author || "");
+    setNewGenre(book.genre || "");
+    setNewYear(book.year || "");
+    setHasChanges(false); // Reset the change tracking
     setModalVisible(true);
   };
 
+  const handleInputChange = (field, value) => {
+    if (field === "title") setNewTitle(value);
+    else if (field === "author") setNewAuthor(value);
+    else if (field === "genre") setNewGenre(value);
+    else if (field === "year") setNewYear(value);
+
+    // Check if any field has changed
+    setHasChanges(
+      value !==
+        (field === "title"
+          ? selectedBook.title
+          : field === "author"
+          ? selectedBook.author
+          : field === "genre"
+          ? selectedBook.genre
+          : selectedBook.year)
+    );
+  };
+
   const openReadBookScreen = (book) => {
-    navigation.navigate("ReadBookScreen", { fileUri: book.uri, title: book.title || "Kein Titel" });
+    navigation.navigate("ReadBookScreen", {
+      fileUri: book.uri,
+      title: book.title || "Kein Titel",
+    });
   };
 
   return (
@@ -83,18 +124,45 @@ export default function BookListScreen({ navigation }) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Optionen</Text>
+            <Text style={styles.modalTitle}>Buchdetails</Text>
 
-            {/* Eingabefeld für Umbenennen */}
+            {/* Eingabefelder für Buchdetails mit Überschriften */}
+            <Text style={styles.inputLabel}>Titel:</Text>
             <TextInput
               style={styles.input}
               placeholder="Neuer Titel"
               value={newTitle}
-              onChangeText={(text) => setNewTitle(text)}
+              onChangeText={(text) => handleInputChange("title", text)}
+            />
+            <Text style={styles.inputLabel}>Autor:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Autor"
+              value={newAuthor}
+              onChangeText={(text) => handleInputChange("author", text)}
+            />
+            <Text style={styles.inputLabel}>Genre:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Genre"
+              value={newGenre}
+              onChangeText={(text) => handleInputChange("genre", text)}
+            />
+            <Text style={styles.inputLabel}>Erscheinungsjahr:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Erscheinungsjahr"
+              value={newYear}
+              onChangeText={(text) => handleInputChange("year", text)}
+              keyboardType="numeric"
             />
 
-            <TouchableOpacity style={styles.modalButton} onPress={renameBook}>
-              <Text style={styles.modalButtonText}>Umbenennen</Text>
+            <TouchableOpacity
+              style={[styles.modalButton, !hasChanges && styles.disabledButton]}
+              onPress={saveChanges}
+              disabled={!hasChanges}
+            >
+              <Text style={styles.modalButtonText}>Speichern</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -162,6 +230,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
+  inputLabel: {
+    alignSelf: "flex-start",
+    fontSize: 16,
+    marginBottom: 5,
+  },
   input: {
     borderWidth: 1,
     borderColor: "#CCC",
@@ -180,6 +253,9 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     backgroundColor: "#FF6B6B",
+  },
+  disabledButton: {
+    backgroundColor: "#CCC",
   },
   modalButtonText: {
     color: "#FFF",
