@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: "#4CAF50",  // Grüner Hintergrund
+    backgroundColor: "#6A5ACD",  // Grüner Hintergrund
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,

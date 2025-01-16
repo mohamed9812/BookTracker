@@ -35,7 +35,12 @@ export default function BookListScreen({ navigation }) {
     fetchBooks();
   }, []);
 
-  
+  const deleteBook = async (book) => {
+    const updatedBooks = books.filter((b) => b.uri !== book.uri);
+    setBooks(updatedBooks);
+    await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
+    Alert.alert("Erfolg", "Das Buch wurde gelöscht.");
+  };
 
   const saveChanges = async () => {
     if (!newTitle.trim()) {
@@ -53,16 +58,36 @@ export default function BookListScreen({ navigation }) {
     Alert.alert("Erfolg", "Die Änderungen wurden gespeichert.");
   };
 
-  
-
-  
-
-  const openReadBookScreen = (book) => {
-    navigation.navigate("ReadBookScreen", {
-      fileUri: book.uri,
-      title: book.title || "Kein Titel",
-    });
+  const openOptions = (book) => {
+    setSelectedBook(book);
+    setNewTitle(book.title || "");
+    setNewAuthor(book.author || "");
+    setNewGenre(book.genre || "");
+    setNewYear(book.year || "");
+    setHasChanges(false); // Reset the change tracking
+    setModalVisible(true);
   };
+
+  const handleInputChange = (field, value) => {
+    if (field === "title") setNewTitle(value);
+    else if (field === "author") setNewAuthor(value);
+    else if (field === "genre") setNewGenre(value);
+    else if (field === "year") setNewYear(value);
+
+    // Check if any field has changed
+    setHasChanges(
+      value !==
+        (field === "title"
+          ? selectedBook.title
+          : field === "author"
+          ? selectedBook.author
+          : field === "genre"
+          ? selectedBook.genre
+          : selectedBook.year)
+    );
+  };
+
+  
 
   return (
     <View style={styles.container}>
@@ -77,7 +102,7 @@ export default function BookListScreen({ navigation }) {
             <TouchableOpacity
               style={styles.bookItem}
              
-              onPress={() => openReadBookScreen(item)} // Klick, um zum ReadBookScreen zu gehen
+              onPress={() => openOptions(item)} // Klick, um zum details zu zeigen
             >
               <Text style={styles.bookName}>{item.title || "Kein Titel"}</Text>
             </TouchableOpacity>

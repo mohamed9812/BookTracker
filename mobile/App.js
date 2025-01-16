@@ -6,7 +6,7 @@ import RegisterScreen from "./src/RegisterScreen";
 import MenuScreen from "./src/MenuScreen";
 import ProfileScreen from "./src/ProfileScreen";
 import UploadBookScreen from "./src/UploadBookScreen";
-import BookDetailsScreen from "./src/BookDetailsScreen";
+
 import SuccessScreen from "./src/SuccessScreen";
 import BookListScreen from "./src/BookListScreen";
 import ReadBookScreen from "./src/ReadBookScreen";
@@ -15,6 +15,10 @@ import RateBookScreen from "./src/RateBookScreen";
 import NotificationScreen from "./src/NotificationScreen";
 import VerifyEmailScreen from "./src/VerifyEmailScreen";
 import NearbyLibrariesScreen from "./src/NearbyLibrariesScreen";
+import DetailsScreen from "./src/DetailsScreen";
+import LieblingsGenresScreen from "./src/LieblingsGenresScreen";
+import BookRecommendationScreen from "./src/BookRecommendationScreen";
+
 import 'react-native-get-random-values';
 
 const Stack = createStackNavigator();
@@ -60,17 +64,7 @@ export default function App() {
             headerTitle: () => null,
           }}
         />
-        <Stack.Screen
-          name="BookDetailsScreen"
-          component={BookDetailsScreen}
-          options={{
-            headerShadowVisible: false,
-            headerStyle: {
-              backgroundColor: "#D8C3FC",
-            },
-            headerTitle: () => null,
-          }}
-        />
+       
         <Stack.Screen
           name="SuccessScreen"
           component={SuccessScreen}
@@ -145,7 +139,22 @@ export default function App() {
             },
             headerTintColor: "#333",
           }}
+         
         />
+        <Stack.Screen name="DetailsScreen" component={DetailsScreen} />
+        <Stack.Screen name="LieblingsGenresScreen" component={LieblingsGenresScreen} />
+        <Stack.Screen
+         name="BookRecommendationScreen"
+         component={BookRecommendationScreen}
+         options={{
+         title: "Buchempfehlungen",
+         headerStyle: { backgroundColor: "#D8C3FC" },
+         headerTitleStyle: { color: "#333" },
+        }}
+      />
+   
+  
+
       </Stack.Navigator>
     </NavigationContainer>
   );

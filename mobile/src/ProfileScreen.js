@@ -42,26 +42,7 @@ export default function ProfileScreen({ navigation }) {
     fetchUserName();
   }, []);
 
-  const calculateFavoriteGenres = async () => {
-    try {
-      const storedBooks = await AsyncStorage.getItem("books");
-      const books = storedBooks ? JSON.parse(storedBooks) : [];
-      const genreCount = {};
-
-      books.forEach((book) => {
-        if (book.genre) {
-          genreCount[book.genre] = (genreCount[book.genre] || 0) + 1;
-        }
-      });
-
-      const sortedGenres = Object.entries(genreCount).sort((a, b) => b[1] - a[1]);
-      setFavoriteGenres(sortedGenres.map(([genre, count]) => ({ genre, count })));
-      setGenresModalVisible(true);
-    } catch (error) {
-      console.error("Fehler beim Abrufen der Genres", error);
-    }
-  };
-
+  
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -77,16 +58,19 @@ export default function ProfileScreen({ navigation }) {
         <Text style={styles.title}>Profil</Text>
       </View>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Buchempfehlungen</Text>
-      </TouchableOpacity>
+      <TouchableOpacity
+  style={styles.button}
+  onPress={() => navigation.navigate("BookRecommendationScreen")}
+>
+  <Text style={styles.buttonText}>Buchempfehlungen</Text>
+</TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.button}
-        onPress={calculateFavoriteGenres}
-      >
-        <Text style={styles.buttonText}>Lieblingsgenres</Text>
-      </TouchableOpacity>
+  style={styles.button}
+  onPress={() => navigation.navigate("LieblingsGenresScreen")}
+>
+  <Text style={styles.buttonText}>Liebliengs Generes</Text>
+</TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.button, styles.logoutButton]}
@@ -126,39 +110,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
       </Modal>
 
-      {/* Modal für Lieblingsgenres */}
-      <Modal
-        transparent={true}
-        visible={genresModalVisible}
-        animationType="slide"
-        onRequestClose={() => setGenresModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Lieblingsgenres</Text>
-            {favoriteGenres.length > 0 ? (
-              <FlatList
-                data={favoriteGenres}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <Text style={styles.genreText}>
-                    {item.genre}: {item.count} 
-                  </Text>
-                )}
-              />
-            ) : (
-              <Text style={styles.noGenresText}>Keine Genres gefunden.</Text>
-            )}
-
-            <TouchableOpacity
-              style={[styles.modalButton, styles.cancelButton]}
-              onPress={() => setGenresModalVisible(false)}
-            >
-              <Text style={styles.cancelText}>Schließen</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+    
     </View>
   );
 }
