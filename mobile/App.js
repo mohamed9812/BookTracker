@@ -6,7 +6,7 @@ import RegisterScreen from "./src/RegisterScreen";
 import MenuScreen from "./src/MenuScreen";
 import ProfileScreen from "./src/ProfileScreen";
 import UploadBookScreen from "./src/UploadBookScreen";
-
+import BookDetailsScreen from "./src/BookDetailsScreen";
 import SuccessScreen from "./src/SuccessScreen";
 import BookListScreen from "./src/BookListScreen";
 import ReadBookScreen from "./src/ReadBookScreen";
@@ -141,7 +141,14 @@ export default function App() {
           }}
          
         />
+
+<Stack.Screen
+          name="BookDetailsScreen"
+          component={BookDetailsScreen}
+          options={{ title: 'Buchdetails' }}
+        />
         <Stack.Screen name="DetailsScreen" component={DetailsScreen} />
+        
         <Stack.Screen name="LieblingsGenresScreen" component={LieblingsGenresScreen} />
         <Stack.Screen
          name="BookRecommendationScreen"
