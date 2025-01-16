@@ -99,7 +99,10 @@ export default function MenuScreen({ navigation }) {
         <Text style={styles.buttonText}>Lesezeitbenachrichtigung</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("NearbyLibrariesScreen")}
+      >
         <Text style={styles.buttonText}>In der Nähe Erkunden</Text>
       </TouchableOpacity>
 

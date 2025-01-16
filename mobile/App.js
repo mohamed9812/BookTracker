@@ -14,6 +14,8 @@ import RatingListScreen from "./src/RatingListScreen";
 import RateBookScreen from "./src/RateBookScreen";
 import NotificationScreen from "./src/NotificationScreen";
 import VerifyEmailScreen from "./src/VerifyEmailScreen";
+import NearbyLibrariesScreen from "./src/NearbyLibrariesScreen";
+import 'react-native-get-random-values';
 
 const Stack = createStackNavigator();
 
@@ -132,6 +134,18 @@ export default function App() {
           }}
         />
         <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
+
+        <Stack.Screen
+          name="NearbyLibrariesScreen"
+          component={NearbyLibrariesScreen}
+          options={{
+            headerTitle: "In der Nähe Erkunden",
+            headerStyle: {
+              backgroundColor: "#D8C3FC",
+            },
+            headerTintColor: "#333",
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
