@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   TouchableOpacity,
   Alert,
@@ -15,11 +14,11 @@ import * as Notifications from "expo-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function NotificationScreen() {
-  const [time, setTime] = useState(new Date());
-  const [title, setTitle] = useState("");
+  const [time, setTime] = useState(null);
   const [message, setMessage] = useState("");
   const [scheduledNotifications, setScheduledNotifications] = useState([]);
   const [showPicker, setShowPicker] = useState(false);
+  const [timeSelected, setTimeSelected] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -47,7 +46,6 @@ export default function NotificationScreen() {
           const filteredNotifications = notifications.filter((notification) => {
             const notificationTime = new Date(notification.time);
             return notificationTime > new Date();
-            n;
           });
           setScheduledNotifications(filteredNotifications);
         }
@@ -74,14 +72,12 @@ export default function NotificationScreen() {
     const currentDate = selectedTime || time;
     setShowPicker(Platform.OS === "ios");
     setTime(currentDate);
+    setTimeSelected(true); // Zeit wurde ausgewählt
   };
 
   const scheduleNotification = async () => {
-    if (!message.trim() || !title.trim()) {
-      Alert.alert(
-        "Fehler",
-        "Bitte gib sowohl einen Titel als auch eine Nachricht ein."
-      );
+    if (!message.trim() || !time) {
+      Alert.alert("Fehler", "Bitte gib eine Nachricht und eine Zeit ein.");
       return;
     }
 
@@ -99,10 +95,8 @@ export default function NotificationScreen() {
       triggerTime.setDate(triggerTime.getDate() + 1);
     }
 
-    // Benachrichtigung planen
     const notificationId = await Notifications.scheduleNotificationAsync({
       content: {
-        title: title,
         body: message,
       },
       trigger: triggerTime,
@@ -110,25 +104,23 @@ export default function NotificationScreen() {
 
     const newNotification = {
       id: notificationId,
-      title,
       message,
       time: triggerTime.toISOString(),
     };
 
     const updatedNotifications = [...scheduledNotifications, newNotification];
 
-    const filteredNotifications = updatedNotifications.filter(
-      (notification) => {
-        const notificationTime = new Date(notification.time);
-        return notificationTime > new Date();
-      }
-    );
+    const filteredNotifications = updatedNotifications.filter((notification) => {
+      const notificationTime = new Date(notification.time);
+      return notificationTime > new Date();
+    });
 
     setScheduledNotifications(filteredNotifications);
     saveNotifications(filteredNotifications);
 
     setMessage("");
-    setTitle("");
+    setTime(null);
+    setTimeSelected(false);
 
     Alert.alert(
       "Benachrichtigung geplant",
@@ -139,16 +131,12 @@ export default function NotificationScreen() {
   const cancelNotification = async (id) => {
     await Notifications.cancelScheduledNotificationAsync(id);
 
-    const updatedNotifications = scheduledNotifications.filter(
-      (n) => n.id !== id
-    );
+    const updatedNotifications = scheduledNotifications.filter((n) => n.id !== id);
 
-    const filteredNotifications = updatedNotifications.filter(
-      (notification) => {
-        const notificationTime = new Date(notification.time);
-        return notificationTime > new Date();
-      }
-    );
+    const filteredNotifications = updatedNotifications.filter((notification) => {
+      const notificationTime = new Date(notification.time);
+      return notificationTime > new Date();
+    });
 
     setScheduledNotifications(filteredNotifications);
     saveNotifications(filteredNotifications);
@@ -163,14 +151,6 @@ export default function NotificationScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Lesezeitbenachrichtigung</Text>
 
-      {/* Titel und Nachricht Eingabefelder */}
-      <Text style={styles.label}>Titel:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Gib einen Titel ein"
-        value={title}
-        onChangeText={setTitle}
-      />
       <Text style={styles.label}>Nachricht:</Text>
       <TextInput
         style={styles.input}
@@ -179,18 +159,21 @@ export default function NotificationScreen() {
         onChangeText={setMessage}
       />
 
-      {/* Zeit Auswahl */}
       <Text style={styles.label}>
-        Gewählte Uhrzeit: {time.toLocaleTimeString()}
+        Gewählte Uhrzeit: {time ? time.toLocaleTimeString() : "Keine Uhrzeit gewählt"}
       </Text>
 
-      <TouchableOpacity style={styles.button} onPress={() => setShowPicker(true)}>
+      <TouchableOpacity
+        style={[styles.button, timeSelected && styles.disabledButton]}
+        onPress={() => setShowPicker(true)}
+        disabled={timeSelected}
+      >
         <Text style={styles.buttonText}>Uhrzeit wählen</Text>
       </TouchableOpacity>
 
       {showPicker && (
         <DateTimePicker
-          value={time}
+          value={time || new Date()}
           mode="time"
           is24Hour={true}
           display="default"
@@ -198,7 +181,14 @@ export default function NotificationScreen() {
         />
       )}
 
-<TouchableOpacity style={styles.button} onPress={scheduleNotification}>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          (!message.trim() || !time) && styles.disabledButton,
+        ]}
+        onPress={scheduleNotification}
+        disabled={!message.trim() || !time}
+      >
         <Text style={styles.buttonText}>Benachrichtigung planen</Text>
       </TouchableOpacity>
 
@@ -210,14 +200,14 @@ export default function NotificationScreen() {
         renderItem={({ item }) => (
           <View style={styles.notificationItem}>
             <Text style={styles.notificationText}>
-              {new Date(item.time).toLocaleTimeString()} - {item.title}:{" "}
-              {item.message}
+              {new Date(item.time).toLocaleTimeString()} - {item.message}
             </Text>
-            <Button
-              title="Löschen"
+            <TouchableOpacity
               onPress={() => cancelNotification(item.id)}
-              color="#FF6B6B"
-            />
+              style={styles.deleteButton}
+            >
+              <Text style={styles.deleteButtonText}>Löschen</Text>
+            </TouchableOpacity>
           </View>
         )}
       />
@@ -269,16 +259,28 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
   },
+  deleteButton: {
+    backgroundColor: "#FF6B6B",
+    padding: 10,
+    borderRadius: 10,
+  },
+  deleteButtonText: {
+    color: "#FFF",
+    fontWeight: "bold",
+  },
   button: {
-    backgroundColor: "#6A5ACD",  // Grüner Hintergrund
+    backgroundColor: "#6A5ACD",
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginVertical: 10,
-    alignItems: "center",  // Text zentrieren
+    alignItems: "center",
   },
   buttonText: {
-    color: "#FFF", // Weißer Text
+    color: "#FFF",
     fontSize: 16,
+  },
+  disabledButton: {
+    backgroundColor: "#AAA",
   },
 });

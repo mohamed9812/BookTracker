@@ -38,10 +38,7 @@ export default function BookListScreen({ navigation }) {
   
 
   const saveChanges = async () => {
-    if (!newTitle.trim()) {
-      Alert.alert("Fehler", "Der Titel darf nicht leer sein.");
-      return;
-    }
+ 
     const updatedBooks = books.map((b) =>
       b.uri === selectedBook.uri
         ? { ...b, title: newTitle, author: newAuthor, genre: newGenre, year: newYear }

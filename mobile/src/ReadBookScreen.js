@@ -12,11 +12,20 @@ export default function ReadBookScreen({ route }) {
         trustAllCerts={false}
         source={{ uri: fileUri }}
         style={styles.pdf}
+        scale={1.0} // Standard-Zoomstufe
+        minScale={1.0} // Mindest-Zoomstufe
+        maxScale={3.0} // Maximale Zoomstufe
+        spacing={5} // Abstände zwischen Seiten
+        enablePaging={true} // Für Seitennavigation
         onLoadComplete={(numberOfPages, filePath) => {
-          console.log(`number of pages: ${numberOfPages}`);
+          console.log(`Number of pages: ${numberOfPages}`);
         }}
+       
         onError={(error) => {
           console.error(error);
+        }}
+        onPressLink={(uri) => {
+          console.log(`Link pressed: ${uri}`);
         }}
       />
     </View>
@@ -34,8 +43,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
+    color: "#333",
   },
   pdf: {
     flex: 1,
+    borderWidth: 1,
+    borderColor: "#AAA",
+    marginTop: 10,
   },
 });
