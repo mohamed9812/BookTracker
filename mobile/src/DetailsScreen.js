@@ -91,7 +91,8 @@ export default function BookListScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bücherliste</Text>
+      <Text style={styles.title}>Buchdetails ergänzen</Text>
+      <Text style={styles.subtitle}>Bitte wähle ein Buch aus:</Text>
       {books.length === 0 ? (
         <Text style={styles.noBooksText}>Keine Bücher verfügbar.</Text>
       ) : (
@@ -102,7 +103,7 @@ export default function BookListScreen({ navigation }) {
             <TouchableOpacity
               style={styles.bookItem}
              
-              onPress={() => openOptions(item)} // Klick, um zum details zu zeigen
+              onPress={() => openOptions(item)}
             >
               <Text style={styles.bookName}>{item.title || "Kein Titel"}</Text>
             </TouchableOpacity>
@@ -190,13 +191,23 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 36,
+    color: "#000000",
+    fontWeight: "300",
+    marginLeft: 15,
+    marginBottom: 40,
+  },
+  subtitle: {
+    fontSize: 18,
     marginBottom: 20,
+    fontWeight: "300",
+    marginLeft: 15,
   },
   noBooksText: {
     fontSize: 16,
-    color: "#555",
+    marginBottom: 20,
+    fontWeight: "300",
+    marginLeft: 15,
   },
   bookItem: {
     padding: 15,

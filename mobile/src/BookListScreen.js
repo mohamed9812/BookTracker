@@ -63,9 +63,10 @@ export default function BookListScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bücherliste</Text>
+      <Text style={styles.title}>Buch lesen</Text>
+      <Text style={styles.subtitle}>Bitte wähle ein Buch aus:</Text>
       {books.length === 0 ? (
-        <Text style={styles.noBooksText}>Keine Bücher verfügbar.</Text>
+        <Text style={styles.noBooksText}>Noch keine Bücher hinzugefügt.</Text>
       ) : (
         <FlatList
           data={books}
@@ -162,22 +163,34 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 55,
+    color: "#000000",
+    marginBottom: 40,
+    fontWeight: "300",
+    marginLeft: 15,
+  },
+  subtitle: {
+    fontSize: 18,
     marginBottom: 20,
+    color: "#555",
+    marginLeft: 20,
   },
   noBooksText: {
     fontSize: 16,
     color: "#555",
+    marginLeft: 20,
   },
   bookItem: {
     padding: 15,
     borderRadius: 10,
     backgroundColor: "#FFF",
     marginBottom: 10,
+    marginLeft: 50,
+    marginRight: 50,
   },
   bookName: {
     fontSize: 18,
+    fontWeight: "300",
   },
   modalContainer: {
     flex: 1,

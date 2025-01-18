@@ -16,10 +16,10 @@ import NotificationScreen from "./src/NotificationScreen";
 import VerifyEmailScreen from "./src/VerifyEmailScreen";
 import NearbyLibrariesScreen from "./src/NearbyLibrariesScreen";
 import DetailsScreen from "./src/DetailsScreen";
-import LieblingsGenresScreen from "./src/LieblingsGenresScreen";
+import FavoriteGenreScreen from "./src/FavoriteGenreScreen";
 import BookRecommendationScreen from "./src/BookRecommendationScreen";
 
-import 'react-native-get-random-values';
+import "react-native-get-random-values";
 
 const Stack = createStackNavigator();
 
@@ -34,7 +34,17 @@ export default function App() {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: "#D8C3FC",
+            },
+            headerTitle: () => null,
+          }}
+        />
         <Stack.Screen
           name="Menu"
           component={MenuScreen}
@@ -64,7 +74,7 @@ export default function App() {
             headerTitle: () => null,
           }}
         />
-       
+
         <Stack.Screen
           name="SuccessScreen"
           component={SuccessScreen}
@@ -133,35 +143,59 @@ export default function App() {
           name="NearbyLibrariesScreen"
           component={NearbyLibrariesScreen}
           options={{
-            headerTitle: "In der Nähe Erkunden",
+            headerShadowVisible: false,
             headerStyle: {
               backgroundColor: "#D8C3FC",
             },
-            headerTintColor: "#333",
+            headerTitle: () => null,
           }}
-         
         />
 
-<Stack.Screen
+        <Stack.Screen
           name="BookDetailsScreen"
           component={BookDetailsScreen}
-          options={{ title: 'Buchdetails' }}
+          options={{
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: "#D8C3FC",
+            },
+            headerTitle: () => null,
+          }}
         />
-        <Stack.Screen name="DetailsScreen" component={DetailsScreen} />
-        
-        <Stack.Screen name="LieblingsGenresScreen" component={LieblingsGenresScreen} />
         <Stack.Screen
-         name="BookRecommendationScreen"
-         component={BookRecommendationScreen}
-         options={{
-         title: "Buchempfehlungen",
-         headerStyle: { backgroundColor: "#D8C3FC" },
-         headerTitleStyle: { color: "#333" },
-        }}
-      />
-   
-  
+          name="DetailsScreen"
+          component={DetailsScreen}
+          options={{
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: "#D8C3FC",
+            },
+            headerTitle: () => null,
+          }}
+        />
 
+        <Stack.Screen
+          name="LieblingsGenresScreen"
+          component={FavoriteGenreScreen}
+          options={{
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: "#D8C3FC",
+            },
+            headerTitle: () => null,
+          }}
+        />
+        <Stack.Screen
+          name="BookRecommendationScreen"
+          component={BookRecommendationScreen}
+          options={{
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: "#D8C3FC",
+            },
+            headerTitle: () => null,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

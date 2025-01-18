@@ -12,8 +12,8 @@ import Svg, { Path } from "react-native-svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen({ navigation }) {
-  const [username, setUsername] = useState(""); // Speichert den Benutzernamen
-  const [password, setPassword] = useState(""); // Speichert das Passwort
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
@@ -106,7 +106,7 @@ export default function LoginScreen({ navigation }) {
         Noch keinen Account?{" "}
         <Text
           style={styles.link}
-          onPress={() => navigation.navigate("Register")} // Navigiere zu RegisterScreen
+          onPress={() => navigation.navigate("Register")}
         >
           Registrieren
         </Text>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingLeft: 50,
     backgroundColor: "#FFFFFF",
-    borderRadius: 30,
+    borderRadius: 20,
     marginBottom: 20,
     width: "70%",
     shadowColor: "#000",
@@ -149,10 +149,10 @@ const styles = StyleSheet.create({
     height: 50,
   },
   icon: {
-    marginRight: 10, // Abstand zwischen Icon und TextInput
+    marginRight: 10,
   },
   user: {
-    flex: 1, // TextInput nimmt den verbleibenden Platz ein
+    flex: 1,
     fontSize: 16,
     color: "#000",
     paddingLeft: 10,
@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
   },
   button: {
-    backgroundColor: "#6A5ACD",
-    borderRadius: 30,
+    backgroundColor: "#6C76CE",
+    borderRadius: 20,
     width: "70%",
     height: 50,
     alignItems: "center",
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "300",
   },
   linkText: {
     marginTop: 10,
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   link: {
-    color: "#6A5ACD",
-    fontWeight: "bold",
+    color: "#6C76CE",
+    fontWeight: "300",
   },
 });

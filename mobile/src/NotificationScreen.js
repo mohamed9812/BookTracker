@@ -12,8 +12,9 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as Notifications from "expo-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Svg, { Path } from "react-native-svg";
 
-export default function NotificationScreen() {
+export default function NotificationScreen({ route, navigation }) {
   const [time, setTime] = useState(null);
   const [message, setMessage] = useState("");
   const [scheduledNotifications, setScheduledNotifications] = useState([]);
@@ -72,12 +73,12 @@ export default function NotificationScreen() {
     const currentDate = selectedTime || time;
     setShowPicker(Platform.OS === "ios");
     setTime(currentDate);
-    setTimeSelected(true); // Zeit wurde ausgewählt
+    setTimeSelected(true);
   };
 
   const scheduleNotification = async () => {
     if (!message.trim() || !time) {
-      Alert.alert("Fehler", "Bitte gib eine Nachricht und eine Zeit ein.");
+      Alert.alert("Fehler", "Bitte eine Nachricht und eine Zeit eingeben.");
       return;
     }
 
@@ -110,10 +111,12 @@ export default function NotificationScreen() {
 
     const updatedNotifications = [...scheduledNotifications, newNotification];
 
-    const filteredNotifications = updatedNotifications.filter((notification) => {
-      const notificationTime = new Date(notification.time);
-      return notificationTime > new Date();
-    });
+    const filteredNotifications = updatedNotifications.filter(
+      (notification) => {
+        const notificationTime = new Date(notification.time);
+        return notificationTime > new Date();
+      }
+    );
 
     setScheduledNotifications(filteredNotifications);
     saveNotifications(filteredNotifications);
@@ -122,21 +125,24 @@ export default function NotificationScreen() {
     setTime(null);
     setTimeSelected(false);
 
-    Alert.alert(
-      "Benachrichtigung geplant",
-      `Die Benachrichtigung wird um ${triggerTime.toLocaleTimeString()} ausgelöst.`
-    );
+    navigation.navigate("SuccessScreen", {
+      titleText: "Lesezeitbenachrichtigung erfolgreich eingestellt!",
+    });
   };
 
   const cancelNotification = async (id) => {
     await Notifications.cancelScheduledNotificationAsync(id);
 
-    const updatedNotifications = scheduledNotifications.filter((n) => n.id !== id);
+    const updatedNotifications = scheduledNotifications.filter(
+      (n) => n.id !== id
+    );
 
-    const filteredNotifications = updatedNotifications.filter((notification) => {
-      const notificationTime = new Date(notification.time);
-      return notificationTime > new Date();
-    });
+    const filteredNotifications = updatedNotifications.filter(
+      (notification) => {
+        const notificationTime = new Date(notification.time);
+        return notificationTime > new Date();
+      }
+    );
 
     setScheduledNotifications(filteredNotifications);
     saveNotifications(filteredNotifications);
@@ -151,25 +157,37 @@ export default function NotificationScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Lesezeitbenachrichtigung</Text>
 
-      <Text style={styles.label}>Nachricht:</Text>
+      <Text style={styles.subtitle}>Bitte richte einen Zeitpunkt ein:</Text>
       <TextInput
         style={styles.input}
-        placeholder="Gib eine Nachricht ein"
+        placeholder="Nachricht"
         value={message}
         onChangeText={setMessage}
       />
-
-      <Text style={styles.label}>
-        Gewählte Uhrzeit: {time ? time.toLocaleTimeString() : "Keine Uhrzeit gewählt"}
-      </Text>
 
       <TouchableOpacity
         style={[styles.button, timeSelected && styles.disabledButton]}
         onPress={() => setShowPicker(true)}
         disabled={timeSelected}
       >
-        <Text style={styles.buttonText}>Uhrzeit wählen</Text>
+        <Text style={styles.buttonText}>Zeit</Text>
+        <Svg
+          width="18"
+          height="20"
+          viewBox="0 0 18 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <Path
+            d="M4 9H6V11H4V9ZM18 4V18C18 19.1 17.1 20 16 20H2C0.89 20 0 19.1 0 18L0.00999999 4C0.00999999 2.9 0.89 2 2 2H3V0H5V2H13V0H15V2H16C17.1 2 18 2.9 18 4ZM2 6H16V4H2V6ZM16 18V8H2V18H16ZM12 11H14V9H12V11ZM8 11H10V9H8V11Z"
+            fill="#AC9999"
+          />
+        </Svg>
       </TouchableOpacity>
+      <Text style={styles.label}>
+        Gewählte Uhrzeit:{" "}
+        {time ? time.toLocaleTimeString() : "Keine Uhrzeit gewählt"}
+      </Text>
 
       {showPicker && (
         <DateTimePicker
@@ -183,13 +201,13 @@ export default function NotificationScreen() {
 
       <TouchableOpacity
         style={[
-          styles.button,
+          styles.saveButton,
           (!message.trim() || !time) && styles.disabledButton,
         ]}
         onPress={scheduleNotification}
         disabled={!message.trim() || !time}
       >
-        <Text style={styles.buttonText}>Benachrichtigung planen</Text>
+        <Text style={styles.saveButtonText}>Speichern</Text>
       </TouchableOpacity>
 
       <Text style={styles.subTitle}>Geplante Benachrichtigungen:</Text>
@@ -222,14 +240,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#D8C3FC",
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
+    fontSize: 36,
+    color: "#000000",
+    marginBottom: 40,
+    fontWeight: "300",
+    marginLeft: 15,
   },
   label: {
-    fontSize: 16,
-    marginTop: 20,
+    fontSize: 14,
+    marginLeft: "16%",
+    marginBottom: "30%",
+  },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 20,
+    color: "#555",
+    marginLeft: 15,
   },
   input: {
     borderWidth: 1,
@@ -238,10 +264,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     backgroundColor: "#FFF",
+    marginLeft: 50,
+    marginRight: 50,
   },
   subTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "300",
     marginTop: 20,
     marginBottom: 10,
   },
@@ -258,6 +286,7 @@ const styles = StyleSheet.create({
   notificationText: {
     flex: 1,
     fontSize: 16,
+    fontWeight: "300",
   },
   deleteButton: {
     backgroundColor: "#FF6B6B",
@@ -266,19 +295,40 @@ const styles = StyleSheet.create({
   },
   deleteButtonText: {
     color: "#FFF",
-    fontWeight: "bold",
+    fontWeight: "300",
   },
   button: {
-    backgroundColor: "#6A5ACD",
-    borderRadius: 10,
+    flexDirection: "row",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 17,
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginVertical: 10,
     alignItems: "center",
+    marginLeft: 50,
+    marginRight: 50,
+  },
+  saveButton: {
+    flexDirection: "row",
+    backgroundColor: "#6C76CE",
+    borderRadius: 17,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 10,
+    alignItems: "center",
+    marginLeft: 50,
+    marginRight: 50,
   },
   buttonText: {
-    color: "#FFF",
-    fontSize: 16,
+    color: "#AC9999",
+    fontSize: 18,
+    marginLeft: "40%",
+    marginRight: "37%"
+  },
+  saveButtonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    marginLeft: "30%",
   },
   disabledButton: {
     backgroundColor: "#AAA",

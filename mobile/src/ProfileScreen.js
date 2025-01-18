@@ -42,7 +42,6 @@ export default function ProfileScreen({ navigation }) {
     fetchUserName();
   }, []);
 
-  
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -59,18 +58,18 @@ export default function ProfileScreen({ navigation }) {
       </View>
 
       <TouchableOpacity
-  style={styles.button}
-  onPress={() => navigation.navigate("BookRecommendationScreen")}
->
-  <Text style={styles.buttonText}>Buchempfehlungen</Text>
-</TouchableOpacity>
+        style={styles.button}
+        onPress={() => navigation.navigate("BookRecommendationScreen")}
+      >
+        <Text style={styles.buttonText}>Buchempfehlungen</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
-  style={styles.button}
-  onPress={() => navigation.navigate("LieblingsGenresScreen")}
->
-  <Text style={styles.buttonText}>Liebliengs Generes</Text>
-</TouchableOpacity>
+        style={styles.button}
+        onPress={() => navigation.navigate("LieblingsGenresScreen")}
+      >
+        <Text style={styles.buttonText}>Liebliengs Generes</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.button, styles.logoutButton]}
@@ -109,8 +108,6 @@ export default function ProfileScreen({ navigation }) {
           </View>
         </View>
       </Modal>
-
-    
     </View>
   );
 }
@@ -119,8 +116,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#D8C3FC",
-    alignItems: "center",
-    justifyContent: "flex-start",
     padding: 16,
   },
   header: {
@@ -130,37 +125,36 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    flex: 1,
-    textAlign: "center",
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#333",
+    fontSize: 36,
+    color: "#000000",
+    fontWeight: "300",
+    marginLeft: 15,
   },
   button: {
-    width: "90%",
-    height: 50,
     backgroundColor: "#FFFFFF",
-    borderRadius: 25,
-    alignItems: "center",
-    justifyContent: "center",
+    borderRadius: 10,
+    paddingVertical: 18,
+    paddingHorizontal: 20,
     marginVertical: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
+    elevation: 2,
+    marginLeft: 40,
+    marginRight: 40,
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#333",
+    fontWeight: "300",
+    marginLeft: "18%",
   },
   logoutButton: {
+    marginTop: "90%",
     backgroundColor: "#FF6B6B",
   },
   logoutButtonText: {
     fontSize: 16,
     color: "#FFFFFF",
     fontWeight: "bold",
+    marginLeft: "39%",
   },
   modalOverlay: {
     flex: 1,

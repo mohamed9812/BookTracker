@@ -67,8 +67,9 @@ export default function MenuScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <Text style={styles.title}>Willkommen zurück,</Text>
-        <Text style={styles.title}>{userName}!</Text>
+
       </View>
+      <Text style={styles.username}>{userName}!</Text>
 
       {/* Buttons im Menü */}
       <TouchableOpacity
@@ -91,6 +92,12 @@ export default function MenuScreen({ navigation }) {
       >
         <Text style={styles.buttonText}>Bewertung abgeben</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("RatingListScreen")}
+      >
+        <Text style={styles.buttonText}>Bewertungen anzeigen</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
@@ -99,13 +106,18 @@ export default function MenuScreen({ navigation }) {
         <Text style={styles.buttonText}>Lesezeitbenachrichtigung</Text>
       </TouchableOpacity>
 
-      
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("NearbyLibrariesScreen")}
+      >
+        <Text style={styles.buttonText}>In der Nähe Erkunden</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("DetailsScreen")}
       >
-        <Text style={styles.buttonText}>Buch Details </Text>
+        <Text style={styles.buttonText}>Buchdetails ergänzen</Text>
       </TouchableOpacity>
 
      
@@ -122,13 +134,23 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "col",
     justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 30,
+    alignItems: "center"
   },
   title: {
     fontSize: 36,
-    fontWeight: "bold",
-    color: "#FFFFFF",
+    color: "#000000",
+    fontWeight: "300"
+  },
+  username: {
+    fontSize: 36,
+    color: "#000000",
+    paddingLeft: 15,
+    paddingBottom: 40,
+    fontWeight: "300"
+  },
+  secondTitle: {
+    fontSize: 36,
+    color: "#000000",
   },
   profileContainer: {
     alignSelf: "flex-end",
@@ -151,5 +173,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#333",
     textAlign: "center",
+    fontWeight: "300",
   },
 });

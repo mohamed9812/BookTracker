@@ -35,12 +35,12 @@ export default function ReadBookScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E3E3FD",
+    backgroundColor: "#D8C3FC",
     padding: 10,
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "300",
     marginBottom: 10,
     textAlign: "center",
     color: "#333",

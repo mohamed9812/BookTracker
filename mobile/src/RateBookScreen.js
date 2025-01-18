@@ -41,8 +41,9 @@ export default function RateBookScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Bewertung abgeben</Text>
       <Text style={styles.title}>{book.title || "Kein Titel"}</Text>
-      <Text style={styles.subtitle}>Bitte wähle eine Bewertung:</Text>
+      <Text style={styles.subtitle}>Bewerten:</Text>
       <View style={styles.ratingContainer}>
         {[1, 2, 3, 4, 5].map((rating) => (
           <TouchableOpacity
@@ -50,7 +51,12 @@ export default function RateBookScreen({ route, navigation }) {
             style={styles.starButton}
             onPress={() => handleRating(rating)}
           >
-            <Text style={[styles.star, selectedRating >= rating && styles.selectedStar]}>
+            <Text
+              style={[
+                styles.star,
+                selectedRating >= rating && styles.selectedStar,
+              ]}
+            >
               ★
             </Text>
           </TouchableOpacity>
@@ -58,12 +64,16 @@ export default function RateBookScreen({ route, navigation }) {
       </View>
       <Text style={styles.noteLabel}>Anmerkung (max. 50 Zeichen):</Text>
       <TextInput
-        style={styles.noteInput}
-        placeholder="Füge eine Anmerkung hinzu..."
-        value={note}
-        onChangeText={(text) => setNote(text)}
-        maxLength={50}
-      />
+          style={styles.noteInput}
+          value={note}
+          onChangeText={(text) => setNote(text)}
+          maxLength={50}
+          multiline
+          numberOfLines={4}
+        />
+      <TouchableOpacity style={styles.nextButton}>
+        <Text style={styles.nextButtonText}>Absenden</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -71,14 +81,15 @@ export default function RateBookScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E3E3FD",
+    backgroundColor: "#D8C3FC",
     padding: 20,
     alignItems: "center",
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 36,
+    color: "#000000",
+    marginBottom: 40,
+    fontWeight: "300",
   },
   subtitle: {
     fontSize: 16,
@@ -94,10 +105,10 @@ const styles = StyleSheet.create({
   },
   star: {
     fontSize: 40,
-    color: "#CCC",
+    color: "#FFFFFF",
   },
   selectedStar: {
-    color: "#FFD700", // Gold für ausgewählte Sterne
+    color: "#FFD700",
   },
   noteLabel: {
     fontSize: 16,
@@ -107,9 +118,29 @@ const styles = StyleSheet.create({
   noteInput: {
     borderWidth: 1,
     borderColor: "#CCC",
-    borderRadius: 10,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
     padding: 10,
-    width: "100%",
+    width: "70%",
     backgroundColor: "#FFF",
+    paddingBottom: "70%",
+  },
+  nextButton: {
+    marginTop: 30,
+    backgroundColor: "#6C76CE",
+    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    elevation: 5,
+    // marginTop: "80%",
+    marginLeft: 50,
+    marginRight: 50,
+  },
+  nextButtonText: {
+    fontSize: 16,
+    color: "#FFFFFF",
+    fontWeight: "300",
   },
 });

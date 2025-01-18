@@ -36,7 +36,8 @@ export default function RatingListScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bewertbare Bücher</Text>
+      <Text style={styles.title}>Bewertung abgeben</Text>
+      <Text style={styles.subtitle}>Bitte wähle ein Buch aus:</Text>
       {books.length === 0 ? (
         <Text style={styles.noBooksText}>Keine Bücher verfügbar.</Text>
       ) : (
@@ -72,23 +73,35 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 36,
+    color: "#000000",
+    marginBottom: 30,
+    fontWeight: "300",
+    marginLeft: 15,
+  },
+  subtitle: {
+    fontSize: 18,
     marginBottom: 20,
+    fontWeight: "300",
+    marginLeft: 20,
   },
   noBooksText: {
     fontSize: 16,
-    color: "#555",
+    marginBottom: 20,
+    fontWeight: "300",
+    marginLeft: 20,
   },
   bookItem: {
     padding: 15,
     borderRadius: 10,
-    backgroundColor: "#FFF",
+    backgroundColor: "#FFFFFF",
     marginBottom: 10,
+    marginLeft: 40,
+    marginRight: 40,
   },
   bookName: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "300",
   },
   bookRating: {
     fontSize: 16,

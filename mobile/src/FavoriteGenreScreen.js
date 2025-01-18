@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function LieblingsGenresScreen() {
+export default function FavoriteGenreScreen() {
   const genres = [
     'Romanze',
     'Krimi',
@@ -95,17 +95,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#D8C3FC',
-    padding: 20,
-    alignItems: 'center',
+    padding: 16,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontSize: 36,
+    color: "#000000",
+    fontWeight: "300",
+    marginLeft: 15,
+    marginBottom: 40,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 20,
     marginBottom: 20,
+    marginLeft: 15,
+    fontWeight: "300",
   },
   genreContainer: {
     flexDirection: 'row',
@@ -121,7 +124,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   selectedButton: {
-    backgroundColor: '#6A5ACD',
+    backgroundColor: '#6C76CE',
   },
   genreText: {
     fontSize: 16,
@@ -132,14 +135,18 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     marginTop: 20,
-    backgroundColor: '#6A5ACD',
+    backgroundColor: '#6C76CE',
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 30,
+    marginLeft: 60,
+    marginRight: 60,
+    marginTop: "30%",
   },
   saveButtonText: {
     fontSize: 16,
     color: '#FFFFFF',
-    fontWeight: 'bold',
+    fontWeight: '300',
+    paddingLeft: "30%",
   },
 });
