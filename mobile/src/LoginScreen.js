@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,6 +14,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Überprüfen, ob bereits eine userId im AsyncStorage vorhanden ist
+    const checkUserId = async () => {
+      try {
+        const userId = await AsyncStorage.getItem("userId");
+        if (userId) {
+          // Falls eine userId vorhanden ist, direkt zum Menü navigieren
+          navigation.replace("Menu");  // Ersetze die aktuelle Route mit dem Menü
+        }
+      } catch (error) {
+        console.error("Fehler beim Abrufen der userId:", error);
+      }
+    };
+
+    checkUserId();
+  }, [navigation]);
 
   const handleLogin = async () => {
     try {

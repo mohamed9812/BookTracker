@@ -91,7 +91,10 @@ export default function ProfileScreen({ navigation }) {
 
             <TouchableOpacity
               style={[styles.modalButton, styles.confirmButton]}
-              onPress={() => {
+              onPress={async () => {
+                await AsyncStorage.removeItem("userId");
+                await AsyncStorage.removeItem("token");
+
                 setModalVisible(false);
                 navigation.navigate("Login");
               }}
