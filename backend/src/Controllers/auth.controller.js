@@ -9,6 +9,7 @@ const transport = require("../Config/nodemailer.config");
 exports.register = async (req, res) => {
   const { username, email, password } = req.body;
 
+
   try {
     const existingEmail = await User.findOne({ email });
     const existingUsername = await User.findOne({ username });
@@ -26,7 +27,7 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       verified: true,
-      genred: [],
+      genres: [],
     });
 
     await newUser.save();
