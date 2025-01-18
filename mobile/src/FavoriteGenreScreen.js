@@ -26,12 +26,16 @@ export default function FavoriteGenreScreen() {
   const [selectedGenres, setSelectedGenres] = useState([]);
 
   useEffect(() => {
-    // Lade die gespeicherten Genres aus AsyncStorage
     const loadGenres = async () => {
+      const userId = await AsyncStorage.getItem("userId");
       try {
-        const storedGenres = await AsyncStorage.getItem('favoriteGenres');
-        if (storedGenres) {
-          setSelectedGenres(JSON.parse(storedGenres));
+        const response = await fetch(`${process.env.EXPO_PUBLIC_BASE_URI}:4000/api/user/get-user-genres/${userId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setSelectedGenres(data.genres);
+        } else {
+          console.error(data.message || 'Fehler beim Laden der Genres');
         }
       } catch (error) {
         console.error('Fehler beim Laden der Genres:', error);
@@ -50,12 +54,29 @@ export default function FavoriteGenreScreen() {
   };
 
   const handleSave = async () => {
+    const userId = await AsyncStorage.getItem("userId");
     try {
-      await AsyncStorage.setItem('favoriteGenres', JSON.stringify(selectedGenres));
-      Alert.alert('Gespeichert', `Deine Lieblingsgenres: ${selectedGenres.join(', ')}`);
+      const response = await fetch(`${process.env.EXPO_PUBLIC_BASE_URI}:4000/api/user/add-genre/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          genre: selectedGenres,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        Alert.alert('Gespeichert', `Deine Lieblingsgenres: ${selectedGenres.join(', ')}`);
+      } else {
+        Alert.alert('Fehler', data.message || 'Die Genres konnten nicht gespeichert werden.');
+      }
     } catch (error) {
-      console.error('Fehler beim Speichern der Genres:', error);
-      Alert.alert('Fehler', 'Die Genres konnten nicht gespeichert werden.');
+      console.error('Fehler beim Senden der Anfrage:', error);
+      Alert.alert('Fehler', 'Es gab ein Problem beim Speichern der Genres.');
     }
   };
 

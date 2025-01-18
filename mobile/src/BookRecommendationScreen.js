@@ -7,41 +7,54 @@ export default function BookRecommendationScreen() {
   const [loading, setLoading] = useState(true);
   const [favoriteGenres, setFavoriteGenres] = useState([]);
 
-  // Lieblingsgenres abrufen
+
   const fetchFavoriteGenres = async () => {
+    const userId = await AsyncStorage.getItem("userId");
     try {
-      const genres = await AsyncStorage.getItem("favoriteGenres");
-      return genres ? JSON.parse(genres) : [];
+      const response = await fetch(`${process.env.EXPO_PUBLIC_BASE_URI}:4000/api/user/get-user-genres/${userId}`);
+      
+      if (!response.ok) {
+        throw new Error("Fehler beim Abrufen der Genres");
+      }
+  
+      const data = await response.json();
+      return data.genres || [];
     } catch (error) {
       console.error("Fehler beim Abrufen der Lieblingsgenres:", error);
       return [];
     }
   };
 
-  // Bücher abrufen basierend auf Lieblingsgenres
+
   const fetchBooks = async (genres) => {
     if (genres.length === 0) {
       setBooks([]);
       setLoading(false);
       return;
     }
-
+  
     try {
-      // Abfrage für das erste Lieblingsgenre (kann angepasst werden)
-      const genre = genres[0].toLowerCase().replace(" ", "_");
-      const response = await fetch(`https://openlibrary.org/subjects/${genre}.json`);
-      if (!response.ok) {
-        throw new Error("Fehler beim Abrufen der API");
-      }
-      const data = await response.json();
-      setBooks(data.works || []);
+
+      const bookRequests = genres.map(async (genre) => {
+        const genreFormatted = genre.toLowerCase().replace(" ", "_");
+        const response = await fetch(`https://openlibrary.org/subjects/${genreFormatted}.json`);
+        if (!response.ok) {
+          throw new Error(`Fehler beim Abrufen der Bücher für ${genre}`);
+        }
+        return response.json();
+      });
+  
+      const bookResponses = await Promise.all(bookRequests);
+      const allBooks = bookResponses.flatMap((data) => data.works || []);
+  
+      setBooks(allBooks);
     } catch (error) {
       console.error("Fehler beim Abrufen der Buchempfehlungen:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
