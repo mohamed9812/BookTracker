@@ -84,7 +84,7 @@ Die Anleitung führt Sie durch die Installation und das Ausführen der beiden Ko
 
 4. **App instalieren**:
    ```bash
-   https://expo.dev/accounts/booktracker/projects/booktracker/builds/77b2488f-a5ed-4ae2-863c-e456ffda6bfb
+   https://expo.dev/accounts/booktracker/projects/booktracker/builds/0b44b902-a4d9-4ba9-b8f5-464e97503ad2
    ```
 5. **App einrichten**
    
