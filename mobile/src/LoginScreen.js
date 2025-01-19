@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   password: {
-    flex: 1, // TextInput nimmt den verbleibenden Platz ein
+    flex: 1, 
     fontSize: 16,
     color: "#000",
     paddingLeft: 25,

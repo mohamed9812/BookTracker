@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {
   View,
@@ -14,30 +15,24 @@ export default function RateBookScreen({ route, navigation }) {
   const [selectedRating, setSelectedRating] = useState(null);
   const [note, setNote] = useState("");
 
-  const handleRating = async (rating) => {
-    if (!note.trim()) {
-      Alert.alert("Fehler", "Bitte füge eine Anmerkung hinzu.");
-      return;
-    }
-    if (note.length > 50) {
-      Alert.alert("Fehler", "Die Anmerkung darf maximal 50 Zeichen lang sein.");
-      return;
-    }
-
-    setSelectedRating(rating);
+  const handleSave = async () => {
     try {
       const storedBooks = await AsyncStorage.getItem("books");
       const books = storedBooks ? JSON.parse(storedBooks) : [];
       const updatedBooks = books.map((b) =>
-        b.uri === book.uri ? { ...b, rating, note } : b
+        b.uri === book.uri ? { ...b, rating: selectedRating, note } : b
       );
       await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
-      Alert.alert("Erfolg", `Das Buch wurde mit ${rating} bewertet.`);
-      navigation.goBack();
+
+      navigation.navigate("SuccessScreen2", {
+        titleText: "Bewertung erfolgreich gegeben",
+      });
     } catch (error) {
       console.error("Fehler beim Speichern der Bewertung:", error);
     }
   };
+
+  const isSaveEnabled = selectedRating !== null ;
 
   return (
     <View style={styles.container}>
@@ -49,7 +44,7 @@ export default function RateBookScreen({ route, navigation }) {
           <TouchableOpacity
             key={rating}
             style={styles.starButton}
-            onPress={() => handleRating(rating)}
+            onPress={() => setSelectedRating(rating)}
           >
             <Text
               style={[
@@ -62,16 +57,20 @@ export default function RateBookScreen({ route, navigation }) {
           </TouchableOpacity>
         ))}
       </View>
-      <Text style={styles.noteLabel}>Anmerkung (max. 50 Zeichen):</Text>
+      <Text style={styles.noteLabel}>Anmerkung (max. 100 Zeichen):</Text>
       <TextInput
-          style={styles.noteInput}
-          value={note}
-          onChangeText={(text) => setNote(text)}
-          maxLength={50}
-          multiline
-          numberOfLines={4}
-        />
-      <TouchableOpacity style={styles.nextButton}>
+        style={styles.noteInput}
+        value={note}
+        onChangeText={(text) => setNote(text)}
+        maxLength={100}
+        multiline
+        numberOfLines={4}
+      />
+      <TouchableOpacity
+        style={[styles.nextButton, !isSaveEnabled && styles.disabledButton]}
+        onPress={handleSave}
+        disabled={!isSaveEnabled}
+      >
         <Text style={styles.nextButtonText}>Absenden</Text>
       </TouchableOpacity>
     </View>
@@ -134,9 +133,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 40,
     elevation: 5,
-    // marginTop: "80%",
-    marginLeft: 50,
-    marginRight: 50,
+  },
+  disabledButton: {
+    backgroundColor: "#AAA",
   },
   nextButtonText: {
     fontSize: 16,

@@ -92,12 +92,14 @@ export default function MenuScreen({ navigation }) {
       >
         <Text style={styles.buttonText}>Bewertung abgeben</Text>
       </TouchableOpacity>
+
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("RatingListScreen")}
+        onPress={() => navigation.navigate("RatingScreen")}
       >
-        <Text style={styles.buttonText}>Bewertungen anzeigen</Text>
+        <Text style={styles.buttonText}>Bewertung anzeigen</Text>
       </TouchableOpacity>
+     
 
       <TouchableOpacity
         style={styles.button}

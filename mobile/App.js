@@ -8,9 +8,11 @@ import ProfileScreen from "./src/ProfileScreen";
 import UploadBookScreen from "./src/UploadBookScreen";
 import BookDetailsScreen from "./src/BookDetailsScreen";
 import SuccessScreen from "./src/SuccessScreen";
+import SuccessScreen2 from "./src/SuccessScreen2";
 import BookListScreen from "./src/BookListScreen";
 import ReadBookScreen from "./src/ReadBookScreen";
 import RatingListScreen from "./src/RatingListScreen";
+import RatingScreen from "./src/RatingScreen";
 import RateBookScreen from "./src/RateBookScreen";
 import NotificationScreen from "./src/NotificationScreen";
 import VerifyEmailScreen from "./src/VerifyEmailScreen";
@@ -82,6 +84,15 @@ export default function App() {
             headerShown: false,
           }}
         />
+
+<Stack.Screen
+          name="SuccessScreen2"
+          component={SuccessScreen2}
+          options={{
+            headerShown: false,
+          }}
+        />
+     
         <Stack.Screen
           name="BookListScreen"
           component={BookListScreen}
@@ -142,6 +153,18 @@ export default function App() {
         <Stack.Screen
           name="NearbyLibrariesScreen"
           component={NearbyLibrariesScreen}
+          options={{
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: "#D8C3FC",
+            },
+            headerTitle: () => null,
+          }}
+        />
+
+        <Stack.Screen
+          name="RatingScreen"
+          component={RatingScreen}
           options={{
             headerShadowVisible: false,
             headerStyle: {
