@@ -24,7 +24,7 @@ export default function RateBookScreen({ route, navigation }) {
       );
       await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
 
-      navigation.navigate("SuccessScreen2", {
+      navigation.navigate("SuccessScreen", {
         titleText: "Bewertung erfolgreich gegeben",
       });
     } catch (error) {

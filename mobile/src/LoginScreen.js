@@ -17,13 +17,11 @@ export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Überprüfen, ob bereits eine userId im AsyncStorage vorhanden ist
     const checkUserId = async () => {
       try {
         const userId = await AsyncStorage.getItem("userId");
         if (userId) {
-          // Falls eine userId vorhanden ist, direkt zum Menü navigieren
-          navigation.replace("Menu");  // Ersetze die aktuelle Route mit dem Menü
+          navigation.replace("Menu");
         }
       } catch (error) {
         console.error("Fehler beim Abrufen der userId:", error);

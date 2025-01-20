@@ -64,7 +64,7 @@ export default function BookListScreen({ navigation }) {
     setNewAuthor(book.author || "");
     setNewGenre(book.genre || "");
     setNewYear(book.year || "");
-    setHasChanges(false); // Reset the change tracking
+    setHasChanges(false);
     setModalVisible(true);
   };
 
@@ -74,7 +74,6 @@ export default function BookListScreen({ navigation }) {
     else if (field === "genre") setNewGenre(value);
     else if (field === "year") setNewYear(value);
 
-    // Check if any field has changed
     setHasChanges(
       value !==
         (field === "title"

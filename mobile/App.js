@@ -8,7 +8,6 @@ import ProfileScreen from "./src/ProfileScreen";
 import UploadBookScreen from "./src/UploadBookScreen";
 import BookDetailsScreen from "./src/BookDetailsScreen";
 import SuccessScreen from "./src/SuccessScreen";
-import SuccessScreen2 from "./src/SuccessScreen2";
 import BookListScreen from "./src/BookListScreen";
 import ReadBookScreen from "./src/ReadBookScreen";
 import RatingListScreen from "./src/RatingListScreen";
@@ -85,13 +84,6 @@ export default function App() {
           }}
         />
 
-<Stack.Screen
-          name="SuccessScreen2"
-          component={SuccessScreen2}
-          options={{
-            headerShown: false,
-          }}
-        />
      
         <Stack.Screen
           name="BookListScreen"

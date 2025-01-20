@@ -5,21 +5,12 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Alert,
-  TextInput,
-  Modal,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function BookListScreen({ navigation }) {
   const [books, setBooks] = useState([]);
-  const [selectedBook, setSelectedBook] = useState(null);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [newTitle, setNewTitle] = useState("");
-  const [newAuthor, setNewAuthor] = useState("");
-  const [newGenre, setNewGenre] = useState("");
-  const [newYear, setNewYear] = useState("");
-  const [hasChanges, setHasChanges] = useState(false);
+
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -36,24 +27,6 @@ export default function BookListScreen({ navigation }) {
   }, []);
 
   
-
-  const saveChanges = async () => {
- 
-    const updatedBooks = books.map((b) =>
-      b.uri === selectedBook.uri
-        ? { ...b, title: newTitle, author: newAuthor, genre: newGenre, year: newYear }
-        : b
-    );
-    setBooks(updatedBooks);
-    await AsyncStorage.setItem("books", JSON.stringify(updatedBooks));
-    setModalVisible(false);
-    Alert.alert("Erfolg", "Die Änderungen wurden gespeichert.");
-  };
-
-  
-
-  
-
   const openReadBookScreen = (book) => {
     navigation.navigate("ReadBookScreen", {
       fileUri: book.uri,
@@ -83,75 +56,6 @@ export default function BookListScreen({ navigation }) {
         />
       )}
 
-      {/* Modal für Optionen */}
-      <Modal
-        visible={isModalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Buchdetails</Text>
-
-            {/* Eingabefelder für Buchdetails mit Überschriften */}
-            <Text style={styles.inputLabel}>Titel:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Neuer Titel"
-              value={newTitle}
-              onChangeText={(text) => handleInputChange("title", text)}
-            />
-            <Text style={styles.inputLabel}>Autor:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Autor"
-              value={newAuthor}
-              onChangeText={(text) => handleInputChange("author", text)}
-            />
-            <Text style={styles.inputLabel}>Genre:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Genre"
-              value={newGenre}
-              onChangeText={(text) => handleInputChange("genre", text)}
-            />
-            <Text style={styles.inputLabel}>Erscheinungsjahr:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Erscheinungsjahr"
-              value={newYear}
-              onChangeText={(text) => handleInputChange("year", text)}
-              keyboardType="numeric"
-            />
-
-            <TouchableOpacity
-              style={[styles.modalButton, !hasChanges && styles.disabledButton]}
-              onPress={saveChanges}
-              disabled={!hasChanges}
-            >
-              <Text style={styles.modalButtonText}>Speichern</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.modalButton, styles.deleteButton]}
-              onPress={() => {
-                setModalVisible(false);
-                deleteBook(selectedBook);
-              }}
-            >
-              <Text style={styles.modalButtonText}>Löschen</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.modalButtonText}>Abbrechen</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 }

@@ -9,10 +9,8 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function BookDetailsScreen({ route, navigation }) {
-  // Empfange fileUri aus den Parametern
   const { fileUri } = route.params;
 
-  // Zustand für Buchdetails
   const [details, setDetails] = useState({
     title: "",
     author: "",
@@ -20,20 +18,18 @@ export default function BookDetailsScreen({ route, navigation }) {
     year: "",
   });
 
-  // Prüfen, ob alle Felder ausgefüllt sind
   const allFieldsFilled = Object.values(details).every(
     (field) => field.trim() !== ""
   );
 
-  // Funktion zum Navigieren und Details übergeben
   const handleFinish = async () => {
     if (allFieldsFilled) {
-      const book = { ...details, uri: fileUri }; // Buchdetails und URI kombinieren
+      const book = { ...details, uri: fileUri };
       try {
         const existingBooks = await AsyncStorage.getItem("books");
         const books = existingBooks ? JSON.parse(existingBooks) : [];
-        books.push(book); // Neues Buch zur Liste hinzufügen
-        await AsyncStorage.setItem("books", JSON.stringify(books)); // Speichern in AsyncStorage
+        books.push(book);
+        await AsyncStorage.setItem("books", JSON.stringify(books)); 
         navigation.navigate("SuccessScreen", {
           titleText: "Buch erfolgreich hinzugefügt!",
         });
